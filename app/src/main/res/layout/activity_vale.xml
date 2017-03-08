@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.marcoscardenas.cialproject.InsertValeActivity">
+
+    <ScrollView
+        android:paddingLeft="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="21dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_margin="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical"
+            android:textAlignment="gravity">
+
+            <TextView
+                android:text="Vehículo que recibe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_vehiculo"
+                android:layout_below="@+id/spinner_obra"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"
+                android:typeface="sans" />
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/autoCompleteTextView_vehiculo"
+                android:layout_below="@+id/textView_vehiculo"
+                android:layout_alignRight="@+id/editText_guia"
+                android:layout_alignEnd="@+id/editText_guia"
+                android:gravity="center_horizontal">
+            <requestFocus />
+            </AutoCompleteTextView>
+
+            <TextView
+                android:text="Usuario o Chofer que recibe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_chofer"
+                android:textStyle="normal|bold"
+                android:textSize="18sp" />
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/autoCompleteTextView_chofer">
+                <requestFocus />
+            </AutoCompleteTextView>
+
+            <TextView
+                android:text="Horómetro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_horometro"
+                android:textStyle="normal|bold"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText_horometro"
+                android:layout_weight="1"
+                android:layout_marginRight="100dp" />
+
+            <TextView
+                android:text="Kilómetro"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:id="@+id/textView_kilometro"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText_kilometro"
+                android:layout_weight="1"
+                android:layout_marginRight="100dp" />
+
+            <TextView
+                android:text="Número de sello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_sello"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText_sello" />
+
+            <TextView
+                android:text="Cantidad"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:id="@+id/textView_cantidad"
+                android:layout_weight="1"
+                android:textStyle="normal|bold"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText_cantidad"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Observaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_Observaciones"
+                android:textStyle="normal|bold"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/editText_observaciones"
+                android:layout_weight="0.87" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:layout_weight="1" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText_vale"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Mes de proceso"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_alignTop="@+id/scrollView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="18sp"
+                android:layout_width="143dp"
+                android:layout_marginRight="137dp"
+                android:textStyle="normal|bold"
+                android:textAlignment="center" />
+
+            <Spinner
+                android:id="@+id/spinner_mes_proceso"
+                android:layout_below="@+id/textView"
+                android:spinnerMode="dialog"
+                android:layout_gravity="left"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                tools:layout_width="match_parent"
+                android:layout_width="324dp"
+                android:layout_weight="0.40" />
+
+            <TextView
+                android:text="Surtidor que entrega"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_surtidor"
+                android:layout_alignTop="@+id/scrollView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="137dp"
+                android:typeface="normal"
+                android:textSize="18sp"
+                android:textStyle="normal|bold"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false" />
+
+            <Spinner
+                android:id="@+id/spinner_surtidor"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:spinnerMode="dialog"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.27" />
+
+            <TextView
+                android:text="Obra"
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:id="@+id/textView_obra"
+                android:gravity="left"
+                android:textSize="18sp"
+                android:textStyle="normal|bold"
+                android:typeface="sans"
+                android:textAlignment="viewStart"
+                android:layout_below="@+id/linearLayout2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="46dp" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_obra"
+                android:spinnerMode="dialog"
+                android:gravity="right"
+                android:layout_weight="0.02"
+                android:layout_below="@+id/linearLayout2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="44dp" />
+
+            <TextView
+                android:id="@+id/textView_fecha"
+                style="@android:style/Widget.DeviceDefault.Light.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2015-07-11"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <Button
+                android:text="Guardar"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:id="@+id/button_guardar"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:theme="@style/Widget.AppCompat.Button"
+                android:layout_alignTop="@+id/scrollView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
