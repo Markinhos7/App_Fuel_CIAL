@@ -45,6 +45,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Marcos on 03-03-17.
@@ -64,12 +65,19 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
     private EditText editText_cantidad;
     private EditText editText_guia_proveedor;
     private EditText editText_num_vale;
+    private EditText editText_observaciones;
     private Button button_guardar;
-    private JsonParse jp = new JsonParse();
+    private JsonParse jp =new JsonParse();
     private TextView textView_fecha;
-    private ArrayList<ObraGetSet> lista_obra = new ArrayList<ObraGetSet>();
-    private ArrayList<MesprocesoGetSet> lista_mes = new ArrayList<MesprocesoGetSet>();
+    private ArrayList<ObraGetSet> lista_obra         = new ArrayList<ObraGetSet>();
+    private ArrayList<MesprocesoGetSet> lista_mes    = new ArrayList<MesprocesoGetSet>();
     private ArrayList<SurtidorGetSet> lista_surtidor = new ArrayList<SurtidorGetSet>();
+
+    private ArrayList<VehiculoGetSet> vehiculo_list ;
+    private String codigo_obra = "";
+    private String codigo_mes = "";
+    private String codigo_surtidor = "";
+
     private Conexion c;
 
     @Override
@@ -82,14 +90,15 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
             StrictMode.setThreadPolicy(policy);
         }
 
-        editText_horometro = (EditText) findViewById(R.id.editText_horometro);
-        editText_kilometro = (EditText) findViewById(R.id.editText_kilometro);
+        editText_horometro      = (EditText) findViewById(R.id.editText_horometro);
+        editText_kilometro      = (EditText) findViewById(R.id.editText_kilometro);
         editText_guia_proveedor = (EditText) findViewById(R.id.editText_guia);
-        editText_num_sello = (EditText) findViewById(R.id.editText_sello);
-        editText_cantidad = (EditText) findViewById(R.id.editText_cantidad);
-        editText_num_vale = (EditText) findViewById(R.id.editText_cantidad);
-        button_guardar = (Button) findViewById(R.id.button_guardar);
-        textView_fecha = (TextView) findViewById(R.id.textView4);
+        editText_num_sello      = (EditText) findViewById(R.id.editText_sello);
+        editText_cantidad       = (EditText) findViewById(R.id.editText_cantidad);
+        editText_num_vale       = (EditText) findViewById(R.id.editText_vale);
+        button_guardar          = (Button) findViewById(R.id.button_guardar);
+        textView_fecha          = (TextView) findViewById(R.id.textView_fecha);
+        editText_observaciones  = (EditText) findViewById(R.id.editText_observaciones);
 
         autoComplete_vehiculos = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_vehiculo);
         autoComplete_chofer = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView_chofer);
@@ -101,16 +110,17 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
 
          c = new Conexion(this);
         ArrayList<ChoferGetSet> chofer  = c.getChofer(autoComplete_chofer.getText().toString());
-        ArrayList<VehiculoGetSet> vehiculo  = c.getVehiculo(autoComplete_vehiculos.getText().toString());
+        vehiculo_list  = c.getVehiculo(autoComplete_vehiculos.getText().toString());
         List<String> array_chofer = new ArrayList<String>();
         List<String> array_vehiculo = new ArrayList<String>();
+
         for (int i = 0; i < chofer.size(); i++) {
             array_chofer.add(chofer.get(i).getRut() + chofer.get(i).getRazon_social());
             int a = array_chofer.size();
 
         }
-        for (int i = 0; i < vehiculo.size(); i++) {
-            array_vehiculo.add(vehiculo.get(i).getPatente());
+        for (int i = 0; i < vehiculo_list.size(); i++) {
+            array_vehiculo.add(vehiculo_list.get(i).getPatente());
             int a = array_chofer.size();
 
         }
@@ -140,37 +150,71 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
         final String mes_proceso   = spinner_mes.getSelectedItem().toString();
         final String obra          = spinner_obra.getSelectedItem().toString();
         final String surtidor      = spinner_surtidor.getSelectedItem().toString();
-        final String horometro     = spinner_mes.getSelectedItem().toString();
+        final String horometro     = editText_horometro.getText().toString();
         final String cantidad      = editText_cantidad.getText().toString();
         final String kilometro     = editText_kilometro.getText().toString();
         final String vale          = editText_num_vale.getText().toString();
-        //final String guia_despacho = editText_guia_proveedor.getText().toString();
+        final String observaciones = editText_observaciones.getText().toString();
+        final String guia_despacho = editText_guia_proveedor.getText().toString();
         final String num_sello     = editText_num_sello.getText().toString();
+        final String fecha         = textView_fecha.getText().toString();
+        int  codigo_obra = 0;
+        int  codigo_mes = 0 ;
+        int  codigo_surtidor = 0  ;
+        int codigo_vehiculo = 0;
 
+        for (int i = 0; i < vehiculo_list.size(); i++) {
+            if (vehiculo_list.get(i).getPatente() == vehiculo){
+                codigo_vehiculo = vehiculo_list.get(i).getCodigo();
+             }
 
+        }
+        for (int i = 0; i < lista_obra.size(); i++) {
+            if(lista_obra.get(i).getNombre() == obra){
+                codigo_obra = lista_obra.get(i).getCod_obra();
+            }
+        }for (int i = 0; i < lista_mes.size(); i++) {
+            if(lista_mes.get(i).getNombre() == mes_proceso){
+                codigo_mes = lista_mes.get(i).getId();
+            }
+        }for (int i = 0; i < lista_surtidor.size(); i++) {
+            if(lista_surtidor.get(i).getDescripcion() == surtidor){
+                codigo_surtidor = lista_surtidor.get(i).getCodigo();
+            }
+        }
+
+        System.out.print("codigo obra:" + codigo_obra );
 
         ContentValues values_encabezado = new ContentValues();
         ContentValues values_detalle = new ContentValues();
 
-        values_encabezado.put(ContractParaVale.Columnas.OBRA, obra);
-        values_encabezado.put(ContractParaVale.Columnas.SURTIDOR, surtidor);
-        values_encabezado.put(ContractParaVale.Columnas.FECHA, "");
-        values_encabezado.put(ContractParaVale.Columnas.VEHICULO, vehiculo);
-        values_encabezado.put(ContractParaVale.Columnas.MES_PROCESO, mes_proceso);
-        values_encabezado.put(ContractParaVale.Columnas.USUARIO, "marcos.cardenas");
-        values_encabezado.put(ContractParaVale.Columnas.VALE, vale);
-        values_encabezado.put(ContractParaVale.Columnas.GUIA, 10);
+        values_encabezado.put(ContractParaVale.Columnas.MES_PROCESO, codigo_mes);
+
+        values_encabezado.put(ContractParaVale.Columnas.SURTIDOR,codigo_surtidor );
+        values_encabezado.put(ContractParaVale.Columnas.VEHICULO, codigo_vehiculo);
+        values_encabezado.put(ContractParaVale.Columnas.OBRA, codigo_obra);
         values_encabezado.put(ContractParaVale.Columnas.RECIBE, chofer);
-        values_encabezado.put(ContractParaVale.Columnas.SELLO, 111);
+        values_encabezado.put(ContractParaVale.Columnas.USUARIO, "marcos.cardenas");
+        values_encabezado.put(ContractParaVale.Columnas.FECHA, fecha);
+        values_encabezado.put(ContractParaVale.Columnas.VALE, vale);
+        values_encabezado.put(ContractParaVale.Columnas.GUIA, guia_despacho);
+        values_encabezado.put(ContractParaVale.Columnas.SELLO, num_sello);
         values_encabezado.put(ContractParaVale.Columnas.HOROMETRO, horometro);
         values_encabezado.put(ContractParaVale.Columnas.KILOMETRO, kilometro);
-        values_encabezado.put(ContractParaVale.Columnas.OBSERVACIONES, "as");
+        values_encabezado.put(ContractParaVale.Columnas.OBSERVACIONES, observaciones);
+        values_encabezado.put(ContractParaVale.Columnas.PENDIENTE_INSERCION, 1);
 
         values_detalle.put(ContractParaVale.Columnas.CANTIDAD, cantidad);
         values_detalle.put(ContractParaVale.Columnas.PRODUCTO, 31);
         values_detalle.put(ContractParaVale.Columnas.VALE_ENC,100000000);
 
         c.Insertar(values_encabezado,values_detalle);
+        //getContentResolver().insert(ContractParaVale.CONTENT_URI, values_encabezado);
+        //SyncAdapter.sincronizarAhora(this,true);
+
+        if (Utilidades.materialDesign())
+            finishAfterTransition();
+        else finish();
 
         }
 

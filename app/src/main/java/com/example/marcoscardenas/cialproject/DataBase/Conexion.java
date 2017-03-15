@@ -53,6 +53,7 @@ public class Conexion extends SQLiteAssetHelper{
 
             } while (cursor.moveToNext());
         }
+        db.close();
         return Array_mes;
     }
     public ArrayList<SurtidorGetSet> getSurtidor() {
@@ -82,6 +83,7 @@ public class Conexion extends SQLiteAssetHelper{
                 Array_surtidor.add(surtidor);
             } while (cursor.moveToNext());
         }
+        db.close();
         return Array_surtidor;
     }
     public ArrayList<ObraGetSet> getObra() {
@@ -104,6 +106,7 @@ public class Conexion extends SQLiteAssetHelper{
                 Array_obra.add(obra);
             } while (cursor.moveToNext());
         }
+        db.close();
         return Array_obra;
     }
 
@@ -127,6 +130,7 @@ public class Conexion extends SQLiteAssetHelper{
                 Array_chofer.add(chofer);
             } while (cursor.moveToNext());
         }
+        db.close();
         return Array_chofer;
     }
     public ArrayList<VehiculoGetSet> getVehiculo(String patente) {
@@ -170,6 +174,7 @@ public class Conexion extends SQLiteAssetHelper{
                 Array_vehiculo.add(vehiculo);
             } while (cursor.moveToNext());
         }
+        db.close();
         return Array_vehiculo;
     }
 

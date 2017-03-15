@@ -152,11 +152,12 @@
                 android:layout_weight="0.87" />
 
             <TextView
-                android:text="TextView"
+                android:id="@+id/textView_vale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView4"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="Número vale"
+                android:textStyle="bold" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -203,7 +204,6 @@
                 android:typeface="normal"
                 android:textSize="18sp"
                 android:textStyle="normal|bold"
-                android:textAlignment="viewStart"
                 android:textAllCaps="false" />
 
             <Spinner
@@ -233,36 +233,52 @@
                 android:layout_marginTop="46dp" />
 
             <Spinner
+                android:id="@+id/spinner_obra"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner_obra"
-                android:spinnerMode="dialog"
-                android:gravity="right"
-                android:layout_weight="0.02"
-                android:layout_below="@+id/linearLayout2"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="44dp" />
+                android:layout_below="@+id/linearLayout2"
+                android:layout_marginTop="44dp"
+                android:layout_weight="0.02"
+                android:gravity="right"
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:id="@+id/textView_fecha"
                 style="@android:style/Widget.DeviceDefault.Light.Spinner"
-                android:layout_width="match_parent"
+                android:layout_width="715dp"
                 android:layout_height="wrap_content"
                 android:text="2015-07-11"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"  />
+
+            <TextView
+                android:id="@+id/textView_guia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Número guía"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editText_guia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
             <Button
-                android:text="Guardar"
+                android:id="@+id/button_guardar"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
-                android:id="@+id/button_guardar"
-                android:gravity="center"
-                android:textAlignment="center"
-                tools:theme="@style/Widget.AppCompat.Button"
-                android:layout_alignTop="@+id/scrollView2"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="254dp"
+                android:gravity="center"
+                android:text="Guardar"
+                android:textAlignment="center"
+                tools:theme="@style/Widget.AppCompat.Button" />
 
         </LinearLayout>
     </ScrollView>

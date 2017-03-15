@@ -8,13 +8,14 @@ public class SurtidorGetSet {
     String descripcion;
     int codigo;
 
-    public SurtidorGetSet() {
-    }
-
     public SurtidorGetSet(String descripcion, int codigo) {
         this.descripcion = descripcion;
         this.codigo = codigo;
     }
+    public SurtidorGetSet() {
+    }
+
+
 
     public int getCodigo() {
         return codigo;

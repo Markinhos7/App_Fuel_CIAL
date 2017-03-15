@@ -25,6 +25,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.Volley;
 import com.example.marcoscardenas.cialproject.Model.GetVale;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
 
@@ -42,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -61,8 +64,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
      * Proyección para las consultas
      */
     private static final String[] PROJECTION = new String[]{
-            ContractParaVale.Columnas._ID,
-            ContractParaVale.Columnas.ID_REMOTA,
+            ContractParaVale.Columnas.ID,
             ContractParaVale.Columnas.MES_PROCESO,
             ContractParaVale.Columnas.SURTIDOR,
             ContractParaVale.Columnas.VEHICULO,
@@ -74,27 +76,27 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ContractParaVale.Columnas.GUIA,
             ContractParaVale.Columnas.SELLO,
             ContractParaVale.Columnas.HOROMETRO,
-            ContractParaVale.Columnas.FECHA,
             ContractParaVale.Columnas.KILOMETRO,
-            ContractParaVale.Columnas.OBSERVACIONES
+            ContractParaVale.Columnas.OBSERVACIONES,
+            ContractParaVale.Columnas.ID_REMOTA
 };
 
     // Indices para las columnas indicadas en la proyección
     public static final int COLUMNA_ID = 0;
-    public static final int COLUMNA_ID_REMOTA = 1;
-    public static final int COLUMNA_MES_PROCESO = 2;
-    public static final int COLUMNA_SURTIDOR = 3;
-    public static final int COLUMNA_VEHICULO = 4;
-    public static final int COLUMNA_OBRA = 5;
-    public static final int COLUMNA_RECIBE = 6;
-    public static final int COLUMNA_USUARIO = 7;
-    public static final int COLUMNA_FECHA = 8;
-    public static final int COLUMNA_VALE = 9;
-    public static final int COLUMNA_GUIA = 10;
-    public static final int COLUMNA_SELLO = 11;
-    public static final int COLUMNA_HOROMETRO = 12;
-    public static final int COLUMNA_KILOMETRO = 13;
-    public static final int COLUMNA_OBSERVACIONES = 14;
+    public static final int COLUMNA_ID_REMOTA = 14;
+    public static final int COLUMNA_MES_PROCESO = 1;
+    public static final int COLUMNA_SURTIDOR = 2;
+    public static final int COLUMNA_VEHICULO = 3;
+    public static final int COLUMNA_OBRA = 4;
+    public static final int COLUMNA_RECIBE = 5;
+    public static final int COLUMNA_USUARIO = 6;
+    public static final int COLUMNA_FECHA = 7;
+    public static final int COLUMNA_VALE = 8;
+    public static final int COLUMNA_GUIA = 9;
+    public static final int COLUMNA_SELLO = 10;
+    public static final int COLUMNA_HOROMETRO = 11;
+    public static final int COLUMNA_KILOMETRO = 12;
+    public static final int COLUMNA_OBSERVACIONES = 13;
 
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -137,7 +139,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void realizarSincronizacionLocal(final SyncResult syncResult) {
         Log.i(TAG, "Actualizando el cliente.");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
                 Request.Method.GET,
                 Constantes.GET_BY_VALE,
                 new Response.Listener<JSONObject>() {
@@ -149,17 +152,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, error.networkResponse.toString());
+                        Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
                     }
                 }
-        );
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest
-        );
+        )
 
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        );
     }
+
 
     /**
      * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
@@ -171,7 +171,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             // Obtener atributo "estado"
             String estado = response.getString(Constantes.ESTADO);
-
+            Log.d("Procesar Respuesta:",estado);
             switch (estado) {
                 case Constantes.SUCCESS: // EXITO
                     actualizarDatosLocales(response, syncResult);
@@ -199,6 +199,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         if (c.getCount() > 0) {
             while (c.moveToNext()) {
                 final int idLocal = c.getInt(COLUMNA_ID);
+                System.out.println("ID :"+idLocal);
 
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(
                         new JsonObjectRequest(
@@ -214,7 +215,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Log.d(TAG, "Error Volley: " + error.getMessage());
+                                        Log.d(TAG, "Error Volley adapter: " + error.getMessage());
                                     }
                                 }
 
@@ -280,7 +281,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
      */
     private void finalizarActualizacion(String idRemota, int idLocal) {
         Uri uri = ContractParaVale.CONTENT_URI;
-        String selection = ContractParaVale.Columnas._ID + "=?";
+        String selection = ContractParaVale.Columnas.ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(idLocal)};
 
         ContentValues v = new ContentValues();
@@ -308,12 +309,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             switch (estado) {
                 case Constantes.SUCCESS:
-                    Log.i(TAG, mensaje);
+                    Log.i(TAG + "SUCCESS", mensaje + idRemota);
                     finalizarActualizacion(idRemota, idLocal);
                     break;
 
                 case Constantes.FAILED:
-                    Log.i(TAG, mensaje);
+                    Log.i(TAG +"Failed", mensaje);
                     break;
             }
         } catch (JSONException e) {
@@ -336,6 +337,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         try {
             // Obtener array "gastos"
             gastos = response.getJSONArray(Constantes.GASTOS);
+            Log.i("datos locales","actualizar datos locales");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -349,10 +351,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Tabla hash para recibir las entradas entrantes
         HashMap<String, GetVale> expenseMap = new HashMap<String, GetVale>();
         for (GetVale e : data) {
-            expenseMap.put(e.RECIBE, e);
+            expenseMap.put(e.Id, e);
         }
-
         // Consultar registros remotos actuales
+        Log.i("consulta registros","consulta registros remotos");
         Uri uri = ContractParaVale.CONTENT_URI;
         String select = ContractParaVale.Columnas.ID_REMOTA + " IS NOT NULL";
         Cursor c = resolver.query(uri, PROJECTION, select, null, null);
@@ -361,11 +363,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
 
         // Encontrar datos obsoletos
-        String id;
-        int monto;
-        String etiqueta;
-        String fecha;
-        String descripcion;
+         String id;
+         String fecha;
          int mes_proceso;
          int surtidor ;
          int vehiculo;
@@ -382,7 +381,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
 
-            id = c.getString(COLUMNA_ID_REMOTA);
+            id          = c.getString(COLUMNA_ID_REMOTA);
             mes_proceso = c.getInt(COLUMNA_MES_PROCESO);
             surtidor    = c.getInt(COLUMNA_SURTIDOR);
             obra        = c.getInt(COLUMNA_OBRA);
@@ -411,38 +410,41 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 // Comprobar si el gasto necesita ser actualizado
 
-                boolean b = match.MES_PROCESO != mes_proceso;
-                boolean b1 = match.OBRA != obra;
-                boolean b2 = match.SURTIDOR != surtidor;
-                boolean b3 = match.VEHICULO != vehiculo;
-                boolean b4 = match.FECHA != null && !match.FECHA.equals(fecha);
-                boolean b5 = match.USUARIO != null && !match.USUARIO.equals(usuario);
-                boolean b6 = match.VALE != vale;
-                boolean b7 = match.GUIA != guia;
-                boolean b8 = match.HOROMETRO != horometro;
-                boolean b9 = match.KILOMETRO != kilometro;
-                boolean b10 = match.OBSERVACIONES != null && !match.OBSERVACIONES.equals(observaciones);
+                boolean b = match.id_mes_proceso != mes_proceso;
+                boolean b1 = match.id_obra != obra;
+                boolean b2 = match.id_surtidor != surtidor;
+                boolean b3 = match.id_vehiculo != vehiculo;
+                boolean b4 = match.rut_recibe != recibe;
+                boolean b5 = match.fecha_crea != null && !match.fecha_crea.equals(fecha);
+                boolean b6 = match.usuario_crea != null && !match.usuario_crea.equals(usuario);
+                boolean b7 = match.numero_vale != vale;
+                boolean b8 = match.numero_guia_proveedor != guia;
+                boolean b9 = match.numero_sello!= sello;
+                boolean b10 = match.contador_hr != horometro;
+                boolean b11 = match.contador_km != kilometro;
+                boolean b12 = match.observaciones != null && !match.observaciones.equals(observaciones);
 
 
 
 
-                if (b || b1 || b2 || b3 || b4 || b5 || b6 || b7 || b8 || b9 || b10  ) {
+                if (b || b1 || b2 || b3 || b4 || b5 || b6 || b7 || b8 || b9 || b10 || b11 || b12 ) {
 
                     Log.i(TAG, "Programando actualización de: " + existingUri);
 
                     ops.add(ContentProviderOperation.newUpdate(existingUri)
-                            .withValue(ContractParaVale.Columnas.MES_PROCESO, match.MES_PROCESO)
-                            .withValue(ContractParaVale.Columnas.SURTIDOR, match.SURTIDOR)
-                            .withValue(ContractParaVale.Columnas.FECHA, match.FECHA)
-                            .withValue(ContractParaVale.Columnas.OBRA, match.OBRA)
-                            .withValue(ContractParaVale.Columnas.VEHICULO, match.VEHICULO)
-                            .withValue(ContractParaVale.Columnas.USUARIO, match.USUARIO)
-                            .withValue(ContractParaVale.Columnas.RECIBE, match.RECIBE)
-                            .withValue(ContractParaVale.Columnas.GUIA, match.GUIA)
-                            .withValue(ContractParaVale.Columnas.SELLO, match.SELLO)
-                            .withValue(ContractParaVale.Columnas.KILOMETRO, match.KILOMETRO)
-                            .withValue(ContractParaVale.Columnas.HOROMETRO, match.HOROMETRO)
-                            .withValue(ContractParaVale.Columnas.OBSERVACIONES, match.OBSERVACIONES)
+                            .withValue(ContractParaVale.Columnas.MES_PROCESO, match.id_mes_proceso)
+                            .withValue(ContractParaVale.Columnas.SURTIDOR, match.id_surtidor)
+                            .withValue(ContractParaVale.Columnas.VEHICULO, match.id_vehiculo)
+                            .withValue(ContractParaVale.Columnas.OBRA, match.id_obra)
+                            .withValue(ContractParaVale.Columnas.RECIBE, match.rut_recibe)
+                            .withValue(ContractParaVale.Columnas.USUARIO, match.usuario_crea)
+                            .withValue(ContractParaVale.Columnas.FECHA, match.fecha_crea)
+                            .withValue(ContractParaVale.Columnas.VALE, match.numero_vale)
+                            .withValue(ContractParaVale.Columnas.GUIA, match.numero_guia_proveedor)
+                            .withValue(ContractParaVale.Columnas.SELLO, match.numero_sello)
+                            .withValue(ContractParaVale.Columnas.HOROMETRO, match.contador_hr)
+                            .withValue(ContractParaVale.Columnas.KILOMETRO, match.contador_km)
+                            .withValue(ContractParaVale.Columnas.OBSERVACIONES, match.observaciones)
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
@@ -461,21 +463,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Insertar items resultantes
         for (GetVale e : expenseMap.values()) {
-            Log.i(TAG, "Programando inserción de: " + e.id);
+            Log.i(TAG, "Programando inserción de: " + e.getId());
             ops.add(ContentProviderOperation.newInsert(ContractParaVale.CONTENT_URI)
-
-                    .withValue(ContractParaVale.Columnas.MES_PROCESO, e.MES_PROCESO)
-                    .withValue(ContractParaVale.Columnas.SURTIDOR, e.SURTIDOR)
-                    .withValue(ContractParaVale.Columnas.FECHA, e.FECHA)
-                    .withValue(ContractParaVale.Columnas.OBRA, e.OBRA)
-                    .withValue(ContractParaVale.Columnas.VEHICULO, e.VEHICULO)
-                    .withValue(ContractParaVale.Columnas.USUARIO, e.USUARIO)
-                    .withValue(ContractParaVale.Columnas.RECIBE, e.RECIBE)
-                    .withValue(ContractParaVale.Columnas.GUIA, e.GUIA)
-                    .withValue(ContractParaVale.Columnas.SELLO, e.SELLO)
-                    .withValue(ContractParaVale.Columnas.KILOMETRO, e.KILOMETRO)
-                    .withValue(ContractParaVale.Columnas.HOROMETRO, e.HOROMETRO)
-                    .withValue(ContractParaVale.Columnas.OBSERVACIONES, e.OBSERVACIONES)
+                    .withValue(ContractParaVale.Columnas.MES_PROCESO, e.id_mes_proceso)
+                    .withValue(ContractParaVale.Columnas.SURTIDOR, e.id_surtidor)
+                    .withValue(ContractParaVale.Columnas.VEHICULO, e.id_vehiculo)
+                    .withValue(ContractParaVale.Columnas.OBRA, e.id_obra)
+                    .withValue(ContractParaVale.Columnas.RECIBE, e.rut_recibe)
+                    .withValue(ContractParaVale.Columnas.USUARIO, e.usuario_crea)
+                    .withValue(ContractParaVale.Columnas.FECHA, e.fecha_crea)
+                    .withValue(ContractParaVale.Columnas.VALE, e.numero_vale)
+                    .withValue(ContractParaVale.Columnas.GUIA, e.numero_guia_proveedor)
+                    .withValue(ContractParaVale.Columnas.SELLO, e.numero_sello)
+                    .withValue(ContractParaVale.Columnas.HOROMETRO, e.contador_hr)
+                    .withValue(ContractParaVale.Columnas.KILOMETRO, e.contador_km)
+                    .withValue(ContractParaVale.Columnas.OBSERVACIONES, e.observaciones)
+                    .withValue(ContractParaVale.Columnas.ID_REMOTA, e.Id)
                     .build());
             syncResult.stats.numInserts++;
         }

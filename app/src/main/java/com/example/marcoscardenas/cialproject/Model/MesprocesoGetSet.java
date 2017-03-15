@@ -6,12 +6,14 @@ package com.example.marcoscardenas.cialproject.Model;
 
 public class MesprocesoGetSet {
     String nombre;
+    int id;
 
-    public MesprocesoGetSet(String nombre) {
+    public MesprocesoGetSet(int id,String nombre) {
         this.nombre = nombre;
+        this.id = id;
     }
-    public MesprocesoGetSet() {
 
+    public MesprocesoGetSet() {
     }
 
     public String getNombre() {
@@ -20,5 +22,13 @@ public class MesprocesoGetSet {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

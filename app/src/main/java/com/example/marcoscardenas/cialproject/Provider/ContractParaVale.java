@@ -11,8 +11,7 @@ public class ContractParaVale {
         /**
          * Autoridad del Content ProviderProvider
          */
-        public final static String AUTHORITY
-                = "com.example.marcoscardenas.cialproject";
+        public final static String AUTHORITY = "com.example.marcoscardenas.cialproject";
         /**
          * Representación de la tabla a consultar
          */
@@ -72,7 +71,7 @@ public class ContractParaVale {
             private Columnas() {
 
             }
-
+            public final static String ID = "Id";
             public final static String MES_PROCESO = "id_mes_proceso";
             public final static String SURTIDOR = "id_surtidor";
             public final static String VEHICULO = "id_vehiculo";

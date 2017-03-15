@@ -9,7 +9,7 @@ public class Constantes {
      * Puerto que utilizas para la conexión.
      * Dejalo en blanco si no has configurado esta característica.
      */
-    private static final String PUERTO_HOST = ":63343";
+    private static final String PUERTO_HOST = "";
 
 
     private static final String IP = "http://192.168.0.213:80/serviciosweb";
@@ -25,7 +25,7 @@ public class Constantes {
     /**
      * Campos de las respuestas Json
      */
-    public static final String ID_GASTO = "id";
+    public static final String ID_GASTO = "Id";
     public static final String ESTADO = "estado";
     public static final String GASTOS = "comb2_vales_encabezado";
     public static final String MENSAJE = "mensaje";

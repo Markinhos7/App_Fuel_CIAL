@@ -8,11 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
@@ -35,12 +38,13 @@ public class MainActivity extends AppCompatActivity {
         Conexion c = new Conexion(this);
         MesprocesoGetSet m = new MesprocesoGetSet();
 
-
         ArrayList<MesprocesoGetSet> mes = new ArrayList<MesprocesoGetSet>();
         mes = c.getMes_proceso();
         MesprocesoGetSet mes1 = new MesprocesoGetSet();
         mes.size();
         SyncAdapter.inicializarSyncAdapter(this);
+
+
         button_ingreso = (Button) findViewById(R.id.fab);
         button_ingreso.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_sync) {
             SyncAdapter.sincronizarAhora(this, false);
+            Toast toast1 =
+                    Toast.makeText(getApplicationContext(),
+                            "Toast por defecto", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
             return true;
         }
 

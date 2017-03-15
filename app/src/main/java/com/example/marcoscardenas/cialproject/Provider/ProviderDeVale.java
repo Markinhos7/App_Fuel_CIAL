@@ -13,6 +13,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 
@@ -20,7 +21,7 @@ import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 public class ProviderDeVale extends ContentProvider {
 
 
-        private static final String DATABASE_NAME = "Becker.db";
+        private static final String DATABASE_NAME = "becker.db";
         /**
          * Versión actual de la base de datos
          */
@@ -75,7 +76,7 @@ public class ProviderDeVale extends ContentProvider {
                     // Consultando un solo registro basado en el Id del Uri
                     long idGasto = ContentUris.parseId(uri);
                     c = db.query(ContractParaVale.VALE_ENCABEZADO, projection,
-                            ContractParaVale.Columnas._ID + " = " + idGasto,
+                            "Id" + " = " + idGasto,
                             selectionArgs, null, null, sortOrder);
                     c.setNotificationUri(
                             resolver,
@@ -151,7 +152,7 @@ public class ProviderDeVale extends ContentProvider {
                             notifyChange(uri, null, false);
                     break;
                 default:
-                    throw new IllegalArgumentException("Elemento gasto desconocido: " +
+                    throw new IllegalArgumentException("Elemento vale desconocido: " +
                             uri);
             }
             return affected;
@@ -169,6 +170,7 @@ public class ProviderDeVale extends ContentProvider {
                     break;
                 case ContractParaVale.SINGLE_ROW:
                     String idGasto = uri.getPathSegments().get(1);
+                    Log.i("ID GASTO",idGasto);
                     affected = db.update(ContractParaVale.VALE_ENCABEZADO, values,
                             ContractParaVale.Columnas.ID_REMOTA + "=" + idGasto
                                     + (!TextUtils.isEmpty(selection) ?

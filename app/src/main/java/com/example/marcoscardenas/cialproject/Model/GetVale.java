@@ -7,143 +7,151 @@ import java.math.BigInteger;
  */
 
 public class GetVale {
-    public int id;
-    public  int MES_PROCESO;
-    public  int SURTIDOR ;
-    public  int VEHICULO;
-    public  int OBRA ;
-    public  String RECIBE ;
-    public  String USUARIO ;
-    public  String FECHA ;
-    public   int VALE ;
-    public  int GUIA ;
-    public  int SELLO ;
-    public  int HOROMETRO ;
-    public  int KILOMETRO ;
-    public  String OBSERVACIONES ;
+    public String Id;
+    public  int id_mes_proceso;
+    public  int id_surtidor ;
+    public  int id_vehiculo;
+    public  int id_obra ;
+    public  String rut_recibe ;
+    public  String usuario_crea ;
+    public  String fecha_crea ;
+    public   int numero_vale ;
+    public  int  numero_guia_proveedor;
+    public  int numero_sello ;
+    public  int contador_hr;
+    public  int contador_km;
+    public  String observaciones ;
 
     public GetVale() {
+
     }
 
-    public GetVale(int id, int SURTIDOR, int MES_PROCESO, int VEHICULO, int OBRA, String RECIBE, String USUARIO, String FECHA, int VALE, int GUIA,
-                   int SELLO, int HOROMETRO, int KILOMETRO, String OBSERVACIONES) {
-        this.id = id;
-        this.SURTIDOR = SURTIDOR;
-        this.MES_PROCESO = MES_PROCESO;
-        this.VEHICULO = VEHICULO;
-        this.OBRA = OBRA;
-        this.RECIBE = RECIBE;
-        this.USUARIO = USUARIO;
-        this.FECHA = FECHA;
-        this.VALE = VALE;
-        this.GUIA = GUIA;
-        this.SELLO = SELLO;
-        this.HOROMETRO = HOROMETRO;
-        this.KILOMETRO = KILOMETRO;
-        this.OBSERVACIONES = OBSERVACIONES;
+    public GetVale(String id, int id_mes_proceso, int id_surtidor, int id_vehiculo, int id_obra, String rut_recibe, String usuario_crea, String fecha_crea, int numero_vale, int numero_guia_proveedor, int numero_sello, int contador_hr, int contador_km, String observaciones) {
+        this.Id = id;
+        this.id_mes_proceso = id_mes_proceso;
+        this.id_surtidor = id_surtidor;
+        this.id_vehiculo = id_vehiculo;
+        this.id_obra = id_obra;
+        this.rut_recibe = rut_recibe;
+        this.usuario_crea = usuario_crea;
+        this.fecha_crea = fecha_crea;
+        this.numero_vale = numero_vale;
+        this.numero_guia_proveedor = numero_guia_proveedor;
+        this.numero_sello = numero_sello;
+        this.contador_hr = contador_hr;
+        this.contador_km = contador_km;
+        this.observaciones = observaciones;
     }
 
-    public int getMES_PROCESO() {
-        return MES_PROCESO;
+    public String getId() {
+        return Id;
     }
 
-    public void setMES_PROCESO(int MES_PROCESO) {
-        this.MES_PROCESO = MES_PROCESO;
+    public void setId(String id) {
+        this.Id = id;
     }
 
-    public int getSURTIDOR() {
-        return SURTIDOR;
+    public int getId_mes_proceso() {
+        return id_mes_proceso;
     }
 
-    public void setSURTIDOR(int SURTIDOR) {
-        this.SURTIDOR = SURTIDOR;
+    public void setId_mes_proceso(int id_mes_proceso) {
+        this.id_mes_proceso = id_mes_proceso;
     }
 
-    public int getVEHICULO() {
-        return VEHICULO;
+    public int getId_surtidor() {
+        return id_surtidor;
     }
 
-    public void setVEHICULO(int VEHICULO) {
-        this.VEHICULO = VEHICULO;
+    public void setId_surtidor(int id_surtidor) {
+        this.id_surtidor = id_surtidor;
     }
 
-    public int getOBRA() {
-        return OBRA;
+    public int getId_vehiculo() {
+        return id_vehiculo;
     }
 
-    public void setOBRA(int OBRA) {
-        this.OBRA = OBRA;
+    public void setId_vehiculo(int id_vehiculo) {
+        this.id_vehiculo = id_vehiculo;
     }
 
-    public String getRECIBE() {
-        return RECIBE;
+    public int getId_obra() {
+        return id_obra;
     }
 
-    public void setRECIBE(String RECIBE) {
-        this.RECIBE = RECIBE;
+    public void setId_obra(int id_obra) {
+        this.id_obra = id_obra;
     }
 
-    public String getUSUARIO() {
-        return USUARIO;
+    public String getRut_recibe() {
+        return rut_recibe;
     }
 
-    public void setUSUARIO(String USUARIO) {
-        this.USUARIO = USUARIO;
+    public void setRut_recibe(String rut_recibe) {
+        this.rut_recibe = rut_recibe;
     }
 
-    public String getFECHA() {
-        return FECHA;
+    public String getUsuario_crea() {
+        return usuario_crea;
     }
 
-    public void setFECHA(String FECHA) {
-        this.FECHA = FECHA;
+    public void setUsuario_crea(String usuario_crea) {
+        this.usuario_crea = usuario_crea;
     }
 
-    public int getVALE() {
-        return VALE;
+    public String getFecha_crea() {
+        return fecha_crea;
     }
 
-    public void setVALE(int VALE) {
-        this.VALE = VALE;
+    public void setFecha_crea(String fecha_crea) {
+        this.fecha_crea = fecha_crea;
     }
 
-    public int getGUIA() {
-        return GUIA;
+    public int getNumero_vale() {
+        return numero_vale;
     }
 
-    public void setGUIA(int GUIA) {
-        this.GUIA = GUIA;
+    public void setNumero_vale(int numero_vale) {
+        this.numero_vale = numero_vale;
     }
 
-    public int getSELLO() {
-        return SELLO;
+    public int getNumero_guia_proveedor() {
+        return numero_guia_proveedor;
     }
 
-    public void setSELLO(int SELLO) {
-        this.SELLO = SELLO;
+    public void setNumero_guia_proveedor(int numero_guia_proveedor) {
+        this.numero_guia_proveedor = numero_guia_proveedor;
     }
 
-    public int getHOROMETRO() {
-        return HOROMETRO;
+    public int getNumero_sello() {
+        return numero_sello;
     }
 
-    public void setHOROMETRO(int HOROMETRO) {
-        this.HOROMETRO = HOROMETRO;
+    public void setNumero_sello(int numero_sello) {
+        this.numero_sello = numero_sello;
     }
 
-    public int getKILOMETRO() {
-        return KILOMETRO;
+    public int getContador_hr() {
+        return contador_hr;
     }
 
-    public void setKILOMETRO(int KILOMETRO) {
-        this.KILOMETRO = KILOMETRO;
+    public void setContador_hr(int contador_hr) {
+        this.contador_hr = contador_hr;
     }
 
-    public String getOBSERVACIONES() {
-        return OBSERVACIONES;
+    public int getContador_km() {
+        return contador_km;
     }
 
-    public void setOBSERVACIONES(String OBSERVACIONES) {
-        this.OBSERVACIONES = OBSERVACIONES;
+    public void setContador_km(int contador_km) {
+        this.contador_km = contador_km;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 }
