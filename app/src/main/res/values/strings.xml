@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CialProject</string>
+    <string name="app_name">C.I.A.L. TEMUCO</string>
     <string name="title_activity_login">LoginActivity</string>
 
     <string name="action_sync">Sincronizar</string>
@@ -10,9 +10,30 @@
 
     <string name="empty_list">No hay datos</string>
 
-    <string name="title_activity_detail">Nuevo gasto</string>
-    <string name="monto_hint">Monto</string>
-    <string name="descripcion_hint">Descripción</string>
-    <string name="etiqueta_title">Etiqueta</string>
-    <string name="fecha_title">Fecha</string>
+
+    <string name="kilometro">Kilómetro:</string>
+    <string name="horometro">Horómetro:</string>
+    <string name="cantidad">Cantidad:</string>
+    <string name="sello">Número sello:</string>
+    <string name="vehiculo">Vehículo recibe:</string>
+    <string name="usuario">Usuario o chofer recibe:</string>
+    <string name="observaciones">Observaciones:</string>
+    <string name="vale">Número Vale:</string>
+    <string name="mes">Mes proceso:</string>
+    <string name="surtidor">Surtidor que entrega:</string>
+    <string name="obra">Obra:</string>
+    <string name="guia">Número guía:</string>
+    <string name="Guardar">Guardar</string>
+    <string name="fecha">2017-03-15</string>
+
+
+    <string name="user">Usuario</string>
+    <string name="pasword">Password</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="login">Ingreso vales combustible</string>
+
+
+
+
+
 </resources>

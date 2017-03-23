@@ -9,8 +9,6 @@ public class Constantes {
      * Puerto que utilizas para la conexión.
      * Dejalo en blanco si no has configurado esta característica.
      */
-    private static final String PUERTO_HOST = "";
-
 
     private static final String IP = "http://192.168.0.213:80/serviciosweb";
      // Rutas de los Web Services
@@ -19,6 +17,7 @@ public class Constantes {
     public static final String GET_BY_CHOFER = IP + "/search_usuario.php?";
     public static final String GET_BY_VALE = IP  +"/Get_vale.php";
     public static final String GET_BY_MES = IP + "/search_mes.php";
+    public static final String GET_BY_OBRA = IP + "/search_obra.php";
     public static final String GET_BY_SURTIDOR = IP + "/search_surtidor.php";
     public static final String POST_VALE = IP + "/insert_Vale.php";
 
@@ -26,8 +25,12 @@ public class Constantes {
      * Campos de las respuestas Json
      */
     public static final String ID_GASTO = "Id";
+    public static final String ID_OBRA = "cod_obra";
     public static final String ESTADO = "estado";
     public static final String GASTOS = "comb2_vales_encabezado";
+    public static final String OBRA = "obras";
+    public static final String SURTIDOR = "surtidores";
+
     public static final String MENSAJE = "mensaje";
 
     /**

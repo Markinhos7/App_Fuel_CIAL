@@ -1,263 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.marcoscardenas.cialproject.InsertValeActivity">
+    android:layout_height="match_parent"
+    tools:context="com.example.marcoscardenas.cialproject.Activity.InsertValeActivity">
 
-    <ScrollView
-        android:paddingLeft="0dp"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="21dp">
+        android:layout_alignParentTop="true"
+        android:theme="@style/Widget.AppCompat.ActionBar.TabBar">
+
+        <!-- Toolbar -->
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:layout_margin="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
             android:orientation="vertical"
-            android:textAlignment="gravity">
+            android:textAlignment="gravity"
+            android:weightSum="1">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/actionModeSplitBackground"
+                android:theme="@style/Widget.AppCompat.ActionBar.TabBar">
+
+                <!-- Toolbar -->
+
+            </android.support.design.widget.AppBarLayout>
 
             <TextView
-                android:text="Vehículo que recibe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView_vehiculo"
-                android:layout_below="@+id/spinner_obra"
-                android:textStyle="normal|bold"
-                android:textSize="18sp"
-                android:typeface="sans" />
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/autoCompleteTextView_vehiculo"
-                android:layout_below="@+id/textView_vehiculo"
-                android:layout_alignRight="@+id/editText_guia"
-                android:layout_alignEnd="@+id/editText_guia"
-                android:gravity="center_horizontal">
-            <requestFocus />
-            </AutoCompleteTextView>
-
-            <TextView
-                android:text="Usuario o Chofer que recibe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/textView_chofer"
-                android:textStyle="normal|bold"
-                android:textSize="18sp" />
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:text="@string/usuario"
+                android:textColor="@android:color/background_dark"
+                android:textColorLink="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
 
             <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView_chofer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/autoCompleteTextView_chofer">
+                android:textColorLink="@android:color/background_dark">
+
                 <requestFocus />
             </AutoCompleteTextView>
 
             <TextView
-                android:text="Horómetro"
+                android:id="@+id/textView_vehiculo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView_horometro"
-                android:textStyle="normal|bold"
-                android:textSize="18sp" />
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"
 
-            <EditText
+                android:text="@string/vehiculo"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="normal|bold"
+                android:typeface="sans" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView_vehiculo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/editText_horometro"
-                android:layout_weight="1"
-                android:layout_marginRight="100dp" />
+                android:textColorLink="@android:color/background_dark">
+
+                <requestFocus />
+            </AutoCompleteTextView>
 
             <TextView
-                android:text="Kilómetro"
+                android:id="@+id/textView_horometro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/horometro"
+                android:textColor="@android:color/background_dark"
+                android:textColorLink="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/editText_horometro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColorLink="@android:color/background_dark" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView_kilometro"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
-                android:id="@+id/textView_kilometro"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/kilometro"
+                android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
                 android:id="@+id/editText_kilometro"
-                android:layout_weight="1"
-                android:layout_marginRight="100dp" />
-
-            <TextView
-                android:text="Número de sello"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
                 android:id="@+id/textView_sello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/sello"
+                android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
             <EditText
+                android:id="@+id/editText_sello"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText_sello" />
-
-            <TextView
-                android:text="Cantidad"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:id="@+id/textView_cantidad"
-                android:layout_weight="1"
-                android:textStyle="normal|bold"
-                android:textSize="18sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/editText_cantidad"
-                android:layout_weight="1" />
-
-            <TextView
-                android:text="Observaciones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView_Observaciones"
-                android:textStyle="normal|bold"
-                android:textSize="18sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/editText_observaciones"
-                android:layout_weight="0.87" />
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView_vale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Número vale"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/vale"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/editText_vale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText_vale"
-                android:layout_weight="1" />
+                android:inputType="number" />
 
             <TextView
-                android:text="Mes de proceso"
-                android:layout_height="wrap_content"
                 android:id="@+id/textView"
-                android:layout_alignTop="@+id/scrollView"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:text="@string/mes"
+                android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
-                android:layout_width="143dp"
-                android:layout_marginRight="137dp"
-                android:textStyle="normal|bold"
-                android:textAlignment="center" />
+                android:textStyle="normal|bold" />
 
             <Spinner
                 android:id="@+id/spinner_mes_proceso"
-                android:layout_below="@+id/textView"
-                android:spinnerMode="dialog"
-                android:layout_gravity="left"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false"
-                tools:layout_width="match_parent"
-                android:layout_width="324dp"
-                android:layout_weight="0.40" />
-
-            <TextView
-                android:text="Surtidor que entrega"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:spinnerMode="dropdown" />
+
+            <TextView
                 android:id="@+id/textView_surtidor"
-                android:layout_alignTop="@+id/scrollView"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="137dp"
-                android:typeface="normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:text="@string/surtidor"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
                 android:textStyle="normal|bold"
-                android:textAllCaps="false" />
+                android:typeface="normal" />
 
             <Spinner
                 android:id="@+id/spinner_surtidor"
-                android:layout_below="@+id/textView"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:spinnerMode="dialog"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.27" />
+                android:gravity="end"
+                android:spinnerMode="dialog" />
 
             <TextView
-                android:text="Obra"
+                android:id="@+id/textView_obra"
                 android:layout_width="match_parent"
                 android:layout_height="29dp"
-                android:id="@+id/textView_obra"
-                android:gravity="left"
+                android:background="@android:color/darker_gray"
+                android:gravity="start"
+                android:text="@string/obra"
+                android:textColor="@android:color/background_dark"
                 android:textSize="18sp"
                 android:textStyle="normal|bold"
-                android:typeface="sans"
-                android:textAlignment="viewStart"
-                android:layout_below="@+id/linearLayout2"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="46dp" />
+                android:typeface="sans" />
 
             <Spinner
                 android:id="@+id/spinner_obra"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/linearLayout2"
-                android:layout_marginTop="44dp"
-                android:layout_weight="0.02"
-                android:gravity="right"
-                android:spinnerMode="dialog" />
 
-            <TextView
-                android:id="@+id/textView_fecha"
-                style="@android:style/Widget.DeviceDefault.Light.Spinner"
-                android:layout_width="715dp"
-                android:layout_height="wrap_content"
-                android:text="2015-07-11"
-                android:textAppearance="?android:attr/textAppearanceSmall"  />
+                android:gravity="end"
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:id="@+id/textView_guia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Número guía"
-                android:textSize="15sp"
+                android:text="@string/guia"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -267,16 +237,57 @@
                 android:ems="10"
                 android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/textView_cantidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/cantidad"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <EditText
+                android:id="@+id/editText_cantidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textView_Observaciones"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@android:color/darker_gray"
+
+                android:text="@string/observaciones"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <EditText
+                android:id="@+id/editText_observaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:id="@+id/textView_fecha"
+                style="@android:style/Widget.DeviceDefault.Light.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fecha"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/background_dark" />
+
             <Button
                 android:id="@+id/button_guardar"
+                style="@style/Theme.Design.BottomSheetDialog"
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="254dp"
-                android:gravity="center"
-                android:text="Guardar"
+                android:layout_height="wrap_content"
+                android:text="@string/Guardar"
                 android:textAlignment="center"
                 tools:theme="@style/Widget.AppCompat.Button" />
 

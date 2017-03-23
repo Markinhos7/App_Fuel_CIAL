@@ -20,17 +20,17 @@ public class ContractParaObras {
     /**
      * Tipo MIME que retorna la consulta de una sola fila
      */
-    public final static String SINGLE_MIME =
+    public final static String SINGLE_MIME_OBRA =
             "vnd.android.cursor.item/vnd." + AUTHORITY + OBRA;
     /**
      * Tipo MIME que retorna la consulta de CONTENT_URI
      */
-    public final static String MULTIPLE_MIME =
+    public final static String MULTIPLE_MIME_OBRA =
             "vnd.android.cursor.dir/vnd." + AUTHORITY + OBRA;
     /**
      * URI de contenido principal
      */
-    public final static Uri CONTENT_URI =
+    public final static Uri CONTENT_URI_OBRA =
             Uri.parse("content://" + AUTHORITY + "/" + OBRA);
     /**
      * Comparador de URIs de contenido
@@ -39,18 +39,18 @@ public class ContractParaObras {
     /**
      * Código para URIs de multiples registros
      */
-    public static final int ALLROWS = 1;
+    public static final int ALLROWS_OBRA = 3;
     /**
      * Código para URIS de un solo registro
      */
-    public static final int SINGLE_ROW = 2;
+    public static final int SINGLE_ROW_OBRA = 4;
 
 
     // Asignación de URIs
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, OBRA, ALLROWS);
-        uriMatcher.addURI(AUTHORITY, OBRA + "/#", SINGLE_ROW);
+        uriMatcher.addURI(AUTHORITY, OBRA, ALLROWS_OBRA);
+        uriMatcher.addURI(AUTHORITY, OBRA + "/#", SINGLE_ROW_OBRA);
     }
 
     // Valores para la columna ESTADO
@@ -66,8 +66,9 @@ public class ContractParaObras {
         private Columnas() {
 
         }
-        public final static String ID = "cod_obra";
-        public final static String NOMBRE = "id_mes_proceso";
+        public final static String COD_OBRA = "cod_obra";
+        public final static String LOCALIDAD = "localidad";
+        public final static String NOMBRE = "nombre";
         public final static String FINALIZADA = "finalizada";
         public final static String VISIBLE_PETROLEO = "visible_petroleo";
 

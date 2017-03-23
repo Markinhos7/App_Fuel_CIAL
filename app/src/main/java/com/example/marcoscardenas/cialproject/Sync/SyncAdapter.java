@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -28,6 +29,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.marcoscardenas.cialproject.Model.GetVale;
+import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
+import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
+import com.example.marcoscardenas.cialproject.Provider.ContractParaObras;
+import com.example.marcoscardenas.cialproject.Provider.ContractParaSurtidor;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
 
 import com.example.marcoscardenas.cialproject.R;
@@ -52,7 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Maneja la transferencia de datos entre el servidor y el cliente
+ * Maneja los datos entre el servidor y el cliente
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getSimpleName();
@@ -60,8 +65,33 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     ContentResolver resolver;
     private Gson gson = new Gson();
 
+       /**
+     * Proyección para las consultas Obra
+     *
+     *
+     */
+    private static final String[] PROJECTION_OBRA = new String[]{
+            ContractParaObras.Columnas.COD_OBRA,
+            ContractParaObras.Columnas.LOCALIDAD,
+            ContractParaObras.Columnas.NOMBRE,
+            ContractParaObras.Columnas.FINALIZADA,
+            ContractParaObras.Columnas.VISIBLE_PETROLEO,
+            ContractParaObras.Columnas.ID_REMOTA,
+
+    };
+
+    // Indices para las columnas indicadas en la proyección obra
+    public static final int COLUMNA_COD_OBRA = 0;
+    public static final int COLUMNA_ID_REMOTA_obra = 5;
+    public static final int COLUMNA_LOCALIDAD = 1;
+    public static final int COLUMNA_NOMBRE = 2;
+    public static final int COLUMNA_FINALIZADA = 3;
+    public static final int COLUMNA_VISIBLE_PETROLEO = 4;
+
     /**
-     * Proyección para las consultas
+     * Proyección para las consultas Vales
+     *
+     *
      */
     private static final String[] PROJECTION = new String[]{
             ContractParaVale.Columnas.ID,
@@ -79,7 +109,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ContractParaVale.Columnas.KILOMETRO,
             ContractParaVale.Columnas.OBSERVACIONES,
             ContractParaVale.Columnas.ID_REMOTA
-};
+    };
 
     // Indices para las columnas indicadas en la proyección
     public static final int COLUMNA_ID = 0;
@@ -132,11 +162,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         if (!soloSubida) {
             realizarSincronizacionLocal(syncResult);
+            realizarSincronizacionLocalObra(syncResult);
+            realizarSincronizacionLocalSurtidores(syncResult);
         } else {
             realizarSincronizacionRemota();
         }
     }
 
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
     private void realizarSincronizacionLocal(final SyncResult syncResult) {
         Log.i(TAG, "Actualizando el cliente.");
         VolleySingleton.getInstance(getContext()).addToRequestQueue(
@@ -153,13 +189,63 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                        Toast toast1 =
+                                Toast.makeText(getContext(),
+                                        "Error de Internet", Toast.LENGTH_SHORT);
+
+                        toast1.show();
                     }
                 }
         )
 
         );
     }
+    private void realizarSincronizacionLocalObra(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_OBRA,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetObra(response, syncResult);
+                                Log.i("Procesa respuesta Obra", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
 
+        );
+    }
+    private void realizarSincronizacionLocalSurtidores(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_SURTIDOR,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetSurtidor(response, syncResult);
+                                Log.i("Procesa  Surtidor", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
+
+        );
+    }
 
     /**
      * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
@@ -175,6 +261,56 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             switch (estado) {
                 case Constantes.SUCCESS: // EXITO
                     actualizarDatosLocales(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+/**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetObra(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesObra(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetSurtidor(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesSurtidor(response, syncResult);
                     break;
                 case Constantes.FAILED: // FALLIDO
                     String mensaje = response.getString(Constantes.MENSAJE);
@@ -290,6 +426,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         v.put(ContractParaVale.Columnas.ID_REMOTA, idRemota);
 
         resolver.update(uri, v, selection, selectionArgs);
+
+    } private void finalizarActualizacionObra(String idRemota, int idLocal) {
+        Uri uri = ContractParaObras.CONTENT_URI_OBRA;
+        String selection = ContractParaObras.Columnas.COD_OBRA + "=?";
+        String[] selectionArgs = new String[]{String.valueOf(idLocal)};
+
+        ContentValues v = new ContentValues();
+        v.put(ContractParaObras.Columnas.PENDIENTE_INSERCION, "0");
+        v.put(ContractParaObras.Columnas.ESTADO, ContractParaVale.ESTADO_OK);
+        v.put(ContractParaObras.Columnas.ID_REMOTA, idRemota);
+
+        resolver.update(uri, v, selection, selectionArgs);
     }
 
     /**
@@ -322,7 +470,273 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
     }
+    /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    private void actualizarDatosLocalesObra(JSONObject response, SyncResult syncResult) {
 
+        JSONArray gastos = null;
+
+        try {
+            // Obtener array "gastos"
+            gastos = response.getJSONArray(Constantes.OBRA);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        ObraGetSet[] res = gson.fromJson(gastos != null ? gastos.toString() : null, ObraGetSet[].class);
+        List<ObraGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, ObraGetSet> expenseMap = new HashMap<String, ObraGetSet>();
+        for (ObraGetSet e : data) {
+            expenseMap.put(e.getCod_obra(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta registros Obra","consulta registros remotos");
+        Uri uri = ContractParaObras.CONTENT_URI_OBRA;
+        String select = ContractParaObras.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, PROJECTION_OBRA, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String cod_obra;
+        String nombre;
+        String localidad;
+        int visible_petroleo ;
+        int finalizada;
+
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            cod_obra         = c.getString(SyncAdapterObra.COLUMNA_ID_REMOTA);
+            nombre           = c.getString(SyncAdapterObra.COLUMNA_NOMBRE);
+            localidad        = c.getString(SyncAdapterObra.COLUMNA_LOCALIDAD);
+            visible_petroleo = c.getInt(SyncAdapterObra.COLUMNA_VISIBLE_PETROLEO);
+            finalizada       = c.getInt(SyncAdapterObra.COLUMNA_FINALIZADA);
+
+            ObraGetSet match = expenseMap.get(cod_obra);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(cod_obra);
+
+                Uri existingUri = ContractParaObras.CONTENT_URI_OBRA.buildUpon()
+                        .appendPath(cod_obra).build();
+
+                // Comprobar si el gasto necesita ser actualizado
+
+                boolean b = match.getCod_obra() != cod_obra && !match.getCod_obra().equals(cod_obra);
+                boolean b1 = match.getNombre() != nombre;
+                boolean b2 = match.getLocalidad() != localidad;
+                boolean b3 = match.getFinalizada() != finalizada;
+                boolean b4 = match.getVisible_petroleo() != visible_petroleo;
+
+
+                if (b || b1 || b2 || b3 || b4 ) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaObras.Columnas.COD_OBRA, match.getCod_obra())
+                            .withValue(ContractParaObras.Columnas.NOMBRE, match.getNombre())
+                            .withValue(ContractParaObras.Columnas.LOCALIDAD, match.getLocalidad())
+                            .withValue(ContractParaObras.Columnas.FINALIZADA, match.getFinalizada())
+                            .withValue(ContractParaObras.Columnas.VISIBLE_PETROLEO, match.getVisible_petroleo())
+
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaObras.CONTENT_URI_OBRA.buildUpon()
+                        .appendPath(cod_obra).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+
+        // Insertar items resultantes
+        for (ObraGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getCod_obra());
+            ops.add(ContentProviderOperation.newInsert(ContractParaObras.CONTENT_URI_OBRA)
+                    .withValue(ContractParaObras.Columnas.COD_OBRA, e.getCod_obra())
+                    .withValue(ContractParaObras.Columnas.NOMBRE, e.getNombre())
+                    .withValue(ContractParaObras.Columnas.LOCALIDAD, e.getLocalidad())
+                    .withValue(ContractParaObras.Columnas.FINALIZADA, e.getFinalizada())
+                    .withValue(ContractParaObras.Columnas.VISIBLE_PETROLEO, e.getVisible_petroleo())
+                    .withValue(ContractParaObras.Columnas.ID_REMOTA, e.getCod_obra())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaVale.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaObras.CONTENT_URI_OBRA,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }     /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    public void actualizarDatosLocalesSurtidor(JSONObject response, SyncResult syncResult) {
+
+        JSONArray surtidor = null;
+
+        try {
+            // Obtener array "surtidor"
+            surtidor = response.getJSONArray(Constantes.SURTIDOR);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        SurtidorGetSet[] res = gson.fromJson(surtidor != null ? surtidor.toString() : null, SurtidorGetSet[].class);
+        List<SurtidorGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, SurtidorGetSet> expenseMap = new HashMap<String, SurtidorGetSet>();
+        for (SurtidorGetSet e : data) {
+            expenseMap.put(e.getCodigo(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta  Surtidor","consulta registros remotos");
+        Uri uri = ContractParaSurtidor.CONTENT_URI_SURTIDOR;
+        String select = ContractParaSurtidor.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, SyncAdapterSurtidor.PROJECTION, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String codigo;
+        int vigente;
+        String descripcion;
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            codigo         = c.getString(SyncAdapterSurtidor.COLUMNA_CODIGO);
+            descripcion    = c.getString(SyncAdapterSurtidor.COLUMNA_DESCRIPCION);
+            vigente        = c.getInt(SyncAdapterSurtidor.COLUMNA_VIGENTE);
+
+            SurtidorGetSet match = expenseMap.get(codigo);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(codigo);
+
+                Uri existingUri = ContractParaSurtidor.CONTENT_URI_SURTIDOR.buildUpon()
+                        .appendPath(codigo).build();
+
+                // Comprobar si el gasto necesita ser actualizado
+
+                boolean b = match.getCodigo() != codigo && !match.getCodigo().equals(codigo);
+                boolean b1 = match.getDescripcion() != descripcion;
+                boolean b2 = match.getVigente() != vigente;
+
+
+                if (b || b1 || b2 ) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaSurtidor.Columnas.CODIGO, match.getCodigo())
+                            .withValue(ContractParaSurtidor.Columnas.DESCRIPCION, match.getDescripcion())
+                            .withValue(ContractParaSurtidor.Columnas.VIGENTE, match.getVigente())
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaSurtidor.CONTENT_URI_SURTIDOR.buildUpon()
+                        .appendPath(codigo).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+
+        // Insertar items resultantes
+        for (SurtidorGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getCodigo());
+            ops.add(ContentProviderOperation.newInsert(ContractParaSurtidor.CONTENT_URI_SURTIDOR)
+                    .withValue(ContractParaSurtidor.Columnas.CODIGO, e.getCodigo())
+                    .withValue(ContractParaSurtidor.Columnas.DESCRIPCION, e.getDescripcion())
+                    .withValue(ContractParaSurtidor.Columnas.VIGENTE, e.getVigente())
+                    .withValue(ContractParaSurtidor.Columnas.ID_REMOTA, e.getCodigo())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaSurtidor.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaSurtidor.CONTENT_URI_SURTIDOR,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }
     /**
      * Actualiza los registros locales a través de una comparación con los datos
      * del servidor

@@ -6,23 +6,16 @@ package com.example.marcoscardenas.cialproject.Model;
 
 public class SurtidorGetSet {
     String descripcion;
-    int codigo;
+    String codigo;
+    int vigente;
 
-    public SurtidorGetSet(String descripcion, int codigo) {
-        this.descripcion = descripcion;
-        this.codigo = codigo;
-    }
+
     public SurtidorGetSet() {
     }
-
-
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
+    public SurtidorGetSet(String descripcion, String codigo, int vigente) {
+        this.descripcion = descripcion;
         this.codigo = codigo;
+        this.vigente = vigente;
     }
 
     public String getDescripcion() {
@@ -31,5 +24,21 @@ public class SurtidorGetSet {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getVigente() {
+        return vigente;
+    }
+
+    public void setVigente(int vigente) {
+        this.vigente = vigente;
     }
 }

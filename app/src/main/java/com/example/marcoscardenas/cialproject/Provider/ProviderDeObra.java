@@ -57,16 +57,16 @@ public class ProviderDeObra extends ContentProvider {
         Cursor c;
 
         switch (match) {
-            case ContractParaObras.ALLROWS:
+            case ContractParaObras.ALLROWS_OBRA:
                 // Consultando todos los registros
                 c = db.query(ContractParaObras.OBRA, projection,
                         selection, selectionArgs,
                         null, null, sortOrder);
                 c.setNotificationUri(
                         resolver,
-                        ContractParaObras.CONTENT_URI);
+                        ContractParaObras.CONTENT_URI_OBRA);
                 break;
-            case ContractParaObras.SINGLE_ROW:
+            case ContractParaObras.SINGLE_ROW_OBRA:
                 // Consultando un solo registro basado en el Id del Uri
                 long id_obra = ContentUris.parseId(uri);
                 c = db.query(ContractParaObras.OBRA, projection,
@@ -74,7 +74,7 @@ public class ProviderDeObra extends ContentProvider {
                         selectionArgs, null, null, sortOrder);
                 c.setNotificationUri(
                         resolver,
-                        ContractParaObras.CONTENT_URI);
+                        ContractParaObras.CONTENT_URI_OBRA);
                 break;
             default:
                 throw new IllegalArgumentException("URI no soportada: " + uri);
@@ -86,10 +86,10 @@ public class ProviderDeObra extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (ContractParaObras.uriMatcher.match(uri)) {
-            case ContractParaObras.ALLROWS:
-                return ContractParaObras.MULTIPLE_MIME;
-            case ContractParaObras.SINGLE_ROW:
-                return ContractParaObras.SINGLE_MIME;
+            case ContractParaObras.ALLROWS_OBRA:
+                return ContractParaObras.MULTIPLE_MIME_OBRA;
+            case ContractParaObras.SINGLE_ROW_OBRA:
+                return ContractParaObras.SINGLE_MIME_OBRA;
             default:
                 throw new IllegalArgumentException("Tipo de gasto desconocido: " + uri);
         }
@@ -98,7 +98,7 @@ public class ProviderDeObra extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         // Validar la uri
-        if (ContractParaObras.uriMatcher.match(uri) != ContractParaObras.ALLROWS) {
+        if (ContractParaObras.uriMatcher.match(uri) != ContractParaObras.ALLROWS_OBRA) {
             throw new IllegalArgumentException("URI desconocida : " + uri);
         }
         ContentValues contentValues;
@@ -113,7 +113,7 @@ public class ProviderDeObra extends ContentProvider {
         long rowId = db.insert(ContractParaObras.OBRA, null, contentValues);
         if (rowId > 0) {
             Uri uri_gasto = ContentUris.withAppendedId(
-                    ContractParaObras.CONTENT_URI, rowId);
+                    ContractParaObras.CONTENT_URI_OBRA, rowId);
             resolver.notifyChange(uri_gasto, null, false);
             return uri_gasto;
         }
@@ -129,12 +129,12 @@ public class ProviderDeObra extends ContentProvider {
         int affected;
 
         switch (match) {
-            case ContractParaObras.ALLROWS:
+            case ContractParaObras.ALLROWS_OBRA:
                 affected = db.delete(ContractParaObras.OBRA,
                         selection,
                         selectionArgs);
                 break;
-            case ContractParaObras.SINGLE_ROW:
+            case ContractParaObras.SINGLE_ROW_OBRA:
                 long id_obra = ContentUris.parseId(uri);
                 affected = db.delete(ContractParaObras.OBRA,
                         ContractParaObras.Columnas.ID_REMOTA + "=" + id_obra
@@ -158,11 +158,11 @@ public class ProviderDeObra extends ContentProvider {
         SQLiteDatabase db = conexion.getWritableDatabase();
         int affected;
         switch (ContractParaObras.uriMatcher.match(uri)) {
-            case ContractParaObras.ALLROWS:
+            case ContractParaObras.ALLROWS_OBRA:
                 affected = db.update(ContractParaObras.OBRA, values,
                         selection, selectionArgs);
                 break;
-            case ContractParaVale.SINGLE_ROW:
+            case ContractParaObras.SINGLE_ROW_OBRA:
                 String id_obra = uri.getPathSegments().get(1);
                 Log.i("ID obra",id_obra);
                 affected = db.update(ContractParaObras.OBRA, values,

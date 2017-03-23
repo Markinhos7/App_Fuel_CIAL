@@ -30,7 +30,7 @@ public class DateDialog extends DialogFragment {
                 getActivity(),
                 (DatePickerDialog.OnDateSetListener) getActivity(),
                 year,
-                month + 1,
+                month,
                 day);
     }
 

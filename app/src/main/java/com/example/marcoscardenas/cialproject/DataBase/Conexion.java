@@ -13,11 +13,13 @@ import com.example.marcoscardenas.cialproject.Model.GetVale;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
 import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
+import com.example.marcoscardenas.cialproject.Model.UsuarioGetSet;
 import com.example.marcoscardenas.cialproject.Model.VehiculoGetSet;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Marcos on 03-03-17.
@@ -36,20 +38,24 @@ public class Conexion extends SQLiteAssetHelper{
     public ArrayList<MesprocesoGetSet> getMes_proceso() {
 
         ArrayList<MesprocesoGetSet> Array_mes = new ArrayList<>();
+        // obtener mes y año
+        Calendar fecha = Calendar.getInstance();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH) + 1;
 
         SQLiteDatabase db = getReadableDatabase();
-        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where cod_empresa = 275 and abierta = 1 and agrupacion = 'Combustibles' ";
+        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where cod_empresa = 275 and mes = 0"+ mes +" and ano="+ año +"  " + "and  abierta = 1 and agrupacion = 'Combustibles' ";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
 
-                MesprocesoGetSet mes = new MesprocesoGetSet();
+                MesprocesoGetSet new_mes = new MesprocesoGetSet();
 
-                mes.setNombre(cursor.getString(cursor.getColumnIndex("proceso")));
+                new_mes.setNombre(cursor.getString(cursor.getColumnIndex("proceso")));
 
                 String a = Integer.toString(Array_mes.size());
-                Array_mes.add(mes);
+                Array_mes.add(new_mes);
 
             } while (cursor.moveToNext());
         }
@@ -75,7 +81,7 @@ public class Conexion extends SQLiteAssetHelper{
 
                 SurtidorGetSet surtidor = new SurtidorGetSet();
 
-                surtidor.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                surtidor.setCodigo(cursor.getString(cursor.getColumnIndex("codigo")));
                 surtidor.setDescripcion(cursor.getString(cursor.getColumnIndex("descripcion")));
 
                 String a = Integer.toString(Array_surtidor.size());
@@ -98,7 +104,7 @@ public class Conexion extends SQLiteAssetHelper{
 
                 ObraGetSet obra = new ObraGetSet();
 
-                obra.setCod_obra(cursor.getInt(cursor.getColumnIndex("cod_obra")));
+                obra.setCod_obra(cursor.getString(cursor.getColumnIndex("cod_obra")));
                 obra.setNombre(cursor.getString(cursor.getColumnIndex("nombre")));
 
                 String a = Integer.toString(Array_obra.size());
@@ -176,6 +182,21 @@ public class Conexion extends SQLiteAssetHelper{
         }
         db.close();
         return Array_vehiculo;
+    }
+    public Boolean Login(String usuario , String password) {
+        boolean salida = false;
+        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "select usuario, password, vigente from usuarios where usuarios.usuario = '"+ usuario +"'" +
+                " and password = '"+password+"' and vigente='1'; ";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() < 1) {
+            cursor.close();
+            salida = false;
+        }else{
+            salida = true;
+        }
+        db.close();
+        return salida;
     }
 
     public void Insertar(ContentValues vale_encabezado, ContentValues vale_detalle) {
