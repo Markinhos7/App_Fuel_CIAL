@@ -7,12 +7,14 @@ package com.example.marcoscardenas.cialproject.Model;
 public class UsuarioGetSet {
     String usuario;
     String password;
-    int id;
+    String id;
+    int vigente;
 
-    public UsuarioGetSet(String usuario, String password, int id) {
+    public UsuarioGetSet(String usuario, String password,String id , int vigente) {
         this.usuario = usuario;
         this.password = password;
         this.id = id;
+        this.vigente = vigente;
     }
 
     public UsuarioGetSet() {
@@ -34,11 +36,18 @@ public class UsuarioGetSet {
         this.password = password;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public int getVigente() {
+        return vigente;
+    }
+    public void setVigente(int vigente) {
+        this.vigente = vigente;
     }
 }

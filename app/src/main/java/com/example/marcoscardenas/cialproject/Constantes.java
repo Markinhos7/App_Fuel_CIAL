@@ -14,11 +14,12 @@ public class Constantes {
      // Rutas de los Web Services
 
     public static final String GET_BY_PATENTE = IP + "/search_vehiculo.php?";
-    public static final String GET_BY_CHOFER = IP + "/search_usuario.php?";
+    public static final String GET_BY_PROVEEDORES = IP + "/search_proveedor.php";
     public static final String GET_BY_VALE = IP  +"/Get_vale.php";
     public static final String GET_BY_MES = IP + "/search_mes.php";
     public static final String GET_BY_OBRA = IP + "/search_obra.php";
     public static final String GET_BY_SURTIDOR = IP + "/search_surtidor.php";
+    public static final String GET_BY_USUARIO = IP + "/Search_usuarios.php";
     public static final String POST_VALE = IP + "/insert_Vale.php";
 
     /**
@@ -30,6 +31,10 @@ public class Constantes {
     public static final String GASTOS = "comb2_vales_encabezado";
     public static final String OBRA = "obras";
     public static final String SURTIDOR = "surtidores";
+    public static final String VEHICULO = "vehiculos";
+    public static final String USUARIO = "usuarios";
+    public static final String MES = "comb2_mes_y_ano_proceso";
+    public static final String PROVEEDORES = "proveedores";
 
     public static final String MENSAJE = "mensaje";
 

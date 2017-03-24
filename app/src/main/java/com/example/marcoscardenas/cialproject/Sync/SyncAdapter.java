@@ -29,12 +29,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.marcoscardenas.cialproject.Model.GetVale;
+import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
+import com.example.marcoscardenas.cialproject.Model.ProveedorGetSet;
 import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
+import com.example.marcoscardenas.cialproject.Model.UsuarioGetSet;
+import com.example.marcoscardenas.cialproject.Model.VehiculoGetSet;
+import com.example.marcoscardenas.cialproject.Provider.ContractParaMes;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaObras;
+import com.example.marcoscardenas.cialproject.Provider.ContractParaProveedor;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaSurtidor;
+import com.example.marcoscardenas.cialproject.Provider.ContractParaUsuarios;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
 
+import com.example.marcoscardenas.cialproject.Provider.ContractParaVehiculos;
 import com.example.marcoscardenas.cialproject.R;
 import com.google.gson.Gson;
 import com.example.marcoscardenas.cialproject.Utilidades;
@@ -164,6 +172,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             realizarSincronizacionLocal(syncResult);
             realizarSincronizacionLocalObra(syncResult);
             realizarSincronizacionLocalSurtidores(syncResult);
+            realizarSincronizacionLocalVehiculos(syncResult);
+            realizarSincronizacionLocalUsuarios(syncResult);
+            realizarSincronizacionLocalMes(syncResult);
+            realizarSincronizacionLocalProveedores(syncResult);
+
         } else {
             realizarSincronizacionRemota();
         }
@@ -200,6 +213,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         );
     }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
     private void realizarSincronizacionLocalObra(final SyncResult syncResult) {
         Log.i(TAG, "Actualizando el cliente.");
         VolleySingleton.getInstance(getContext()).addToRequestQueue(
@@ -223,6 +240,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         );
     }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
     private void realizarSincronizacionLocalSurtidores(final SyncResult syncResult) {
         Log.i(TAG, "Actualizando el cliente.");
         VolleySingleton.getInstance(getContext()).addToRequestQueue(
@@ -234,6 +255,114 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             public void onResponse(JSONObject response) {
                                 procesarRespuestaGetSurtidor(response, syncResult);
                                 Log.i("Procesa  Surtidor", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
+
+        );
+    }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
+    private void realizarSincronizacionLocalVehiculos(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_PATENTE,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetVehiculo(response, syncResult);
+                                Log.i("Procesa  Vehiculo", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
+
+        );
+    }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
+    private void realizarSincronizacionLocalUsuarios(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_USUARIO,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetUsuarios(response, syncResult);
+                                Log.i("Procesa Usuarios", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
+
+        );
+    }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
+    private void realizarSincronizacionLocalMes(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_MES,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetMes(response, syncResult);
+                                Log.i("Procesa  Vehiculo", "Actualizando el cliente.");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, " Error de sincronizacion servidor local" +error.getMessage());
+                            }
+                        }
+                )
+
+        );
+    }
+    /**
+     * Realiza Sincronizacion local de datos
+     * @param syncResult
+     */
+    private void realizarSincronizacionLocalProveedores(final SyncResult syncResult) {
+        Log.i(TAG, "Actualizando el cliente.");
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(
+                new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constantes.GET_BY_PROVEEDORES,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuestaGetProveedores(response, syncResult);
+                                Log.i("Procesa  Proveedores", "Actualizando el cliente.");
                             }
                         },
                         new Response.ErrorListener() {
@@ -322,6 +451,106 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
     }
+    /**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetVehiculo(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesVehiculos(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetUsuarios(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesUsuarios(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetMes(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesMes(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
+     *
+     * @param response   Respuesta en formato Json
+     * @param syncResult Registro de resultados de sincronización
+     */
+    private void procesarRespuestaGetProveedores(JSONObject response, SyncResult syncResult) {
+        try {
+            // Obtener atributo "estado"
+            String estado = response.getString(Constantes.ESTADO);
+            Log.d("Procesar Respuesta:",estado);
+            switch (estado) {
+                case Constantes.SUCCESS: // EXITO
+                    actualizarDatosLocalesProveedores(response, syncResult);
+                    break;
+                case Constantes.FAILED: // FALLIDO
+                    String mensaje = response.getString(Constantes.MENSAJE);
+                    Log.i(TAG, mensaje);
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void realizarSincronizacionRemota() {
         Log.i(TAG, "Actualizando el servidor...");
@@ -377,7 +606,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
         c.close();
     }
-
     /**
      * Obtiene el registro que se acaba de marcar como "pendiente por sincronizar" y
      * con "estado de sincronización"
@@ -392,7 +620,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         return resolver.query(uri, PROJECTION, selection, selectionArgs, null);
     }
-
     /**
      * Cambia a estado "de sincronización" el registro que se acaba de insertar localmente
      */
@@ -408,7 +635,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         int results = resolver.update(uri, v, selection, selectionArgs);
         Log.i(TAG, "Registros puestos en cola de inserción:" + results);
     }
-
     /**
      * Limpia el registro que se sincronizó y le asigna la nueva id remota proveida
      * por el servidor
@@ -427,19 +653,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         resolver.update(uri, v, selection, selectionArgs);
 
-    } private void finalizarActualizacionObra(String idRemota, int idLocal) {
-        Uri uri = ContractParaObras.CONTENT_URI_OBRA;
-        String selection = ContractParaObras.Columnas.COD_OBRA + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(idLocal)};
-
-        ContentValues v = new ContentValues();
-        v.put(ContractParaObras.Columnas.PENDIENTE_INSERCION, "0");
-        v.put(ContractParaObras.Columnas.ESTADO, ContractParaVale.ESTADO_OK);
-        v.put(ContractParaObras.Columnas.ID_REMOTA, idRemota);
-
-        resolver.update(uri, v, selection, selectionArgs);
     }
-
     /**
      * Procesa los diferentes tipos de respuesta obtenidos del servidor
      *
@@ -609,7 +823,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.i(TAG, "No se requiere sincronización");
         }
 
-    }     /**
+    }
+    /**
      * Actualiza los registros locales a través de una comparación con los datos
      * del servidor
      *
@@ -723,6 +938,542 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
             resolver.notifyChange(
                     ContractParaSurtidor.CONTENT_URI_SURTIDOR,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }
+    /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    public void actualizarDatosLocalesVehiculos(JSONObject response, SyncResult syncResult) {
+
+        JSONArray vehiculo = null;
+
+        try {
+            // Obtener array "vehiculo"
+            vehiculo = response.getJSONArray(Constantes.VEHICULO);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        VehiculoGetSet[] res = gson.fromJson(vehiculo != null ? vehiculo.toString() : null, VehiculoGetSet[].class);
+        List<VehiculoGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, VehiculoGetSet> expenseMap = new HashMap<String, VehiculoGetSet>();
+        for (VehiculoGetSet e : data) {
+            expenseMap.put(e.getCodigo(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta  vehiculo","consulta registros remotos");
+        Uri uri = ContractParaVehiculos.CONTENT_URI_VEHICULO;
+        String select = ContractParaVehiculos.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, SyncAdapterVehiculos.PROJECTION, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String codigo;
+        String patente;
+        String fecha;
+        String forma_pago;
+        String valor_pago;
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            codigo     = c.getString(SyncAdapterVehiculos.COLUMNA_CODIGO);
+            patente    = c.getString(SyncAdapterVehiculos.COLUMNA_PATENTE);
+            fecha      = c.getString(SyncAdapterVehiculos.COLUMNA_FECHA);
+            forma_pago = c.getString(SyncAdapterVehiculos.COLUMNA_FORMA_PAGO);
+            valor_pago = c.getString(SyncAdapterVehiculos.COLUMNA_VALOR_PAGO);
+
+            VehiculoGetSet match = expenseMap.get(codigo);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(codigo);
+
+                Uri existingUri = ContractParaVehiculos.CONTENT_URI_VEHICULO.buildUpon()
+                        .appendPath(codigo).build();
+
+                // Comprobar si el gasto necesita ser actualizado
+
+                boolean b = match.getCodigo() != codigo && !match.getCodigo().equals(codigo);
+                boolean b1 = match.getPatente() != patente && !match.getPatente().equals(patente);
+                boolean b2 = match.getFecha() != fecha && !match.getFecha().equals(fecha);
+                boolean b3 = match.getForma_pago() != forma_pago && !match.getForma_pago().equals(forma_pago);
+                boolean b4 = match.getValor_pago() != valor_pago && !match.getValor_pago().equals(valor_pago);
+
+
+                if (b || b1 || b2 || b3 || b4) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaVehiculos.Columnas.CODIGO, match.getCodigo())
+                            .withValue(ContractParaVehiculos.Columnas.PATENTE, match.getPatente())
+                            .withValue(ContractParaVehiculos.Columnas.FECHA, match.getFecha())
+                            .withValue(ContractParaVehiculos.Columnas.FORMA_PAGO, match.getForma_pago())
+                            .withValue(ContractParaVehiculos.Columnas.VALOR_PAGO, match.getValor_pago())
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaVehiculos.CONTENT_URI_VEHICULO.buildUpon()
+                        .appendPath(codigo).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+
+        // Insertar items resultantes
+        for (VehiculoGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getCodigo());
+            ops.add(ContentProviderOperation.newInsert(ContractParaVehiculos.CONTENT_URI_VEHICULO)
+                    .withValue(ContractParaVehiculos.Columnas.CODIGO, e.getCodigo())
+                    .withValue(ContractParaVehiculos.Columnas.PATENTE, e.getPatente())
+                    .withValue(ContractParaVehiculos.Columnas.FECHA, e.getFecha())
+                    .withValue(ContractParaVehiculos.Columnas.FORMA_PAGO, e.getForma_pago())
+                    .withValue(ContractParaVehiculos.Columnas.VALOR_PAGO, e.getValor_pago())
+                    .withValue(ContractParaVehiculos.Columnas.ID_REMOTA, e.getCodigo())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaVehiculos.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaVehiculos.CONTENT_URI_VEHICULO,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }
+    /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    public void actualizarDatosLocalesUsuarios(JSONObject response, SyncResult syncResult) {
+
+        JSONArray usuarios = null;
+
+        try {
+            // Obtener array "usuarios"
+            usuarios = response.getJSONArray(Constantes.USUARIO);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        UsuarioGetSet[] res = gson.fromJson(usuarios != null ? usuarios.toString() : null, UsuarioGetSet[].class);
+        List<UsuarioGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, UsuarioGetSet> expenseMap = new HashMap<String, UsuarioGetSet>();
+        for (UsuarioGetSet e : data) {
+            expenseMap.put(e.getId(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta  usuarios","consulta registros remotos");
+        Uri uri = ContractParaUsuarios.CONTENT_URI_USUARIO;
+        String select = ContractParaUsuarios.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, SyncAdapterUsuarios.PROJECTION, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String indice;
+        String usuario;
+        String password;
+        int vigente;
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            indice     = c.getString(SyncAdapterUsuarios.COLUMNA_INDICE);
+            usuario    = c.getString(SyncAdapterUsuarios.COLUMNA_USUARIO);
+            password   = c.getString(SyncAdapterUsuarios.COLUMNA_PASSWORD);
+            vigente    = c.getInt(SyncAdapterUsuarios.COLUMNA_VIGENTE);
+
+            UsuarioGetSet match = expenseMap.get(indice);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(indice);
+
+                Uri existingUri = ContractParaUsuarios.CONTENT_URI_USUARIO.buildUpon()
+                        .appendPath(indice).build();
+
+                // Comprobar si el usuario necesita ser actualizado
+
+                boolean b = match.getId() != indice && !match.getId().equals(indice);
+                boolean b1 = match.getUsuario() != usuario && !match.getUsuario().equals(usuario);
+                boolean b2 = match.getPassword() != password && !match.getPassword().equals(password);
+                boolean b3 = match.getVigente() != vigente ;
+
+                if (b || b1 || b2 || b3) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaUsuarios.Columnas.INDICE, match.getId())
+                            .withValue(ContractParaUsuarios.Columnas.USUARIO, match.getUsuario())
+                            .withValue(ContractParaUsuarios.Columnas.PASSWORD, match.getPassword())
+                            .withValue(ContractParaUsuarios.Columnas.VIGENTE, match.getVigente())
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaUsuarios.CONTENT_URI_USUARIO.buildUpon()
+                        .appendPath(indice).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+        // Insertar items resultantes
+        for (UsuarioGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getId());
+            ops.add(ContentProviderOperation.newInsert(ContractParaUsuarios.CONTENT_URI_USUARIO)
+                    .withValue(ContractParaUsuarios.Columnas.INDICE, e.getId())
+                    .withValue(ContractParaUsuarios.Columnas.USUARIO, e.getUsuario())
+                    .withValue(ContractParaUsuarios.Columnas.PASSWORD, e.getPassword())
+                    .withValue(ContractParaUsuarios.Columnas.VIGENTE, e.getVigente())
+                    .withValue(ContractParaUsuarios.Columnas.ID_REMOTA, e.getId())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaUsuarios.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaUsuarios.CONTENT_URI_USUARIO,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }
+    /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    public void actualizarDatosLocalesMes(JSONObject response, SyncResult syncResult) {
+
+        JSONArray mes_proceso = null;
+
+        try {
+            // Obtener array "mes"
+            mes_proceso = response.getJSONArray(Constantes.MES);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        MesprocesoGetSet[] res = gson.fromJson(mes_proceso != null ? mes_proceso.toString() : null, MesprocesoGetSet[].class);
+        List<MesprocesoGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, MesprocesoGetSet> expenseMap = new HashMap<String, MesprocesoGetSet>();
+        for (MesprocesoGetSet e : data) {
+            expenseMap.put(e.getId(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta  vehiculo","consulta registros remotos");
+        Uri uri = ContractParaMes.CONTENT_URI_MES;
+        String select = ContractParaMes.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, SyncAdapterMes.PROJECTION, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String id;
+        String  proceso;
+        int abierta;
+        int mes;
+        int ano;
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            id        = c.getString(SyncAdapterMes.COLUMNA_ID);
+            proceso   = c.getString(SyncAdapterMes.COLUMNA_PROCESO);
+            abierta   = c.getInt(SyncAdapterMes.COLUMNA_ABIERTA);
+            mes       = c.getInt(SyncAdapterMes.COLUMNA_MES);
+            ano       = c.getInt(SyncAdapterMes.COLUMNA_ANO);
+
+            MesprocesoGetSet match = expenseMap.get(id);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(id);
+
+                Uri existingUri = ContractParaMes.CONTENT_URI_MES.buildUpon()
+                        .appendPath(id).build();
+
+                // Comprobar si el gasto necesita ser actualizado
+
+                boolean b = match.getId() != id && !match.getId().equals(id);
+                boolean b1 = match.getProceso() != proceso && !match.getProceso().equals(proceso);
+                boolean b2 = match.getAbierta() != abierta ;
+                boolean b3 = match.getMes() != mes ;
+                boolean b4 = match.getAno() != ano ;
+
+
+                if (b || b1 || b2 || b3 || b4) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaMes.Columnas.ID, match.getId())
+                            .withValue(ContractParaMes.Columnas.PROCESO, match.getProceso())
+                            .withValue(ContractParaMes.Columnas.ABIERTA, match.getAbierta())
+                            .withValue(ContractParaMes.Columnas.MES, match.getMes())
+                            .withValue(ContractParaMes.Columnas.ANO, match.getAno())
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaMes.CONTENT_URI_MES.buildUpon()
+                        .appendPath(id).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+
+        // Insertar items resultantes
+        for (MesprocesoGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getId());
+            ops.add(ContentProviderOperation.newInsert(ContractParaMes.CONTENT_URI_MES)
+                    .withValue(ContractParaMes.Columnas.ID, e.getId())
+                    .withValue(ContractParaMes.Columnas.PROCESO, e.getProceso())
+                    .withValue(ContractParaMes.Columnas.ABIERTA, e.getAbierta())
+                    .withValue(ContractParaMes.Columnas.MES, e.getMes())
+                    .withValue(ContractParaMes.Columnas.ANO, e.getAno())
+                    .withValue(ContractParaMes.Columnas.ID_REMOTA, e.getId())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaMes.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaMes.CONTENT_URI_MES,
+                    null,
+                    false);
+            Log.i(TAG, "Sincronización finalizada.");
+            Toast toast1 =
+                    Toast.makeText(getContext(),
+                            "Sincronización finalizada.", Toast.LENGTH_SHORT);
+
+            toast1.show();
+
+        } else {
+            Log.i(TAG, "No se requiere sincronización");
+        }
+
+    }
+    /**
+     * Actualiza los registros locales a través de una comparación con los datos
+     * del servidor
+     *
+     * @param response   Respuesta en formato Json obtenida del servidor
+     * @param syncResult Registros de la sincronización
+     */
+    public void actualizarDatosLocalesProveedores(JSONObject response, SyncResult syncResult) {
+
+        JSONArray proveedor = null;
+
+        try {
+            // Obtener array "proveedor"
+            proveedor = response.getJSONArray(Constantes.PROVEEDORES);
+            Log.i("datos locales","actualizar datos locales");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Parsear con Gson
+        ProveedorGetSet[] res = gson.fromJson(proveedor != null ? proveedor.toString() : null, ProveedorGetSet[].class);
+        List<ProveedorGetSet> data = Arrays.asList(res);
+
+        // Lista para recolección de operaciones pendientes
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+        // Tabla hash para recibir las entradas entrantes
+        HashMap<String, ProveedorGetSet> expenseMap = new HashMap<String, ProveedorGetSet>();
+        for (ProveedorGetSet e : data) {
+            expenseMap.put(e.getRut(), e);
+        }
+        // Consultar registros remotos actuales
+        Log.i("consulta  proveedor","consulta registros remotos");
+        Uri uri = ContractParaProveedor.CONTENT_URI_PROVEEDOR;
+        String select = ContractParaProveedor.Columnas.ID_REMOTA + " IS NOT NULL";
+        Cursor c = resolver.query(uri, SyncAdapterProveedores.PROJECTION, select, null, null);
+        assert c != null;
+
+        Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+
+        // Encontrar datos obsoletos
+        String rut;
+        String razon_social;
+        String usuario_petroleo;
+
+
+        while (c.moveToNext()) {
+            syncResult.stats.numEntries++;
+
+            rut              = c.getString(SyncAdapterProveedores.COLUMNA_RUT);
+            razon_social     = c.getString(SyncAdapterProveedores.COLUMNA_RAZON_SOCIAL);
+            usuario_petroleo = c.getString(SyncAdapterProveedores.COLUMNA_USUARIO_PETROLEO);
+
+            ProveedorGetSet match = expenseMap.get(rut);
+
+            if (match != null) {
+                // Esta entrada existe, por lo que se remueve del mapeado
+                expenseMap.remove(rut);
+
+                Uri existingUri = ContractParaProveedor.CONTENT_URI_PROVEEDOR.buildUpon()
+                        .appendPath(rut).build();
+
+                // Comprobar si el gasto necesita ser actualizado
+
+                boolean b = match.getRut() != rut && !match.getRut().equals(rut);
+                boolean b1 = match.getRazon_social() != razon_social && !match.getRazon_social().equals(razon_social);
+                boolean b2 = match.getUsuario_petroleo() != usuario_petroleo && !match.getUsuario_petroleo().equals(usuario_petroleo);
+
+
+                if (b || b1 || b2 ) {
+
+                    Log.i(TAG, "Programando actualización de: " + existingUri);
+
+                    ops.add(ContentProviderOperation.newUpdate(existingUri)
+                            .withValue(ContractParaProveedor.Columnas.RUT, match.getRut())
+                            .withValue(ContractParaProveedor.Columnas.RAZON_SOCIAL, match.getRazon_social())
+                            .withValue(ContractParaProveedor.Columnas.USUARIO_PETROLEO, match.getUsuario_petroleo())
+                            .build());
+                    syncResult.stats.numUpdates++;
+                } else {
+                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                }
+            } else {
+                // Debido a que la entrada no existe, es removida de la base de datos
+                Uri deleteUri = ContractParaProveedor.CONTENT_URI_PROVEEDOR.buildUpon()
+                        .appendPath(rut).build();
+                Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                syncResult.stats.numDeletes++;
+            }
+        }
+        c.close();
+
+        // Insertar items resultantes
+        for (ProveedorGetSet e : expenseMap.values()) {
+            Log.i(TAG, "Programando inserción de: " + e.getRut());
+            ops.add(ContentProviderOperation.newInsert(ContractParaProveedor.CONTENT_URI_PROVEEDOR)
+                    .withValue(ContractParaProveedor.Columnas.RUT, e.getRut())
+                    .withValue(ContractParaProveedor.Columnas.RAZON_SOCIAL, e.getRazon_social())
+                    .withValue(ContractParaProveedor.Columnas.USUARIO_PETROLEO, e.getUsuario_petroleo())
+                    .withValue(ContractParaProveedor.Columnas.ID_REMOTA, e.getRut())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        if (syncResult.stats.numInserts > 0 ||
+                syncResult.stats.numUpdates > 0 ||
+                syncResult.stats.numDeletes > 0) {
+            Log.i(TAG, "Aplicando operaciones...");
+            try {
+                resolver.applyBatch(ContractParaProveedor.AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            resolver.notifyChange(
+                    ContractParaProveedor.CONTENT_URI_PROVEEDOR,
                     null,
                     false);
             Log.i(TAG, "Sincronización finalizada.");
@@ -917,7 +1668,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
     }
-
     /**
      * Inicia manualmente la sincronización
      *
@@ -934,7 +1684,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ContentResolver.requestSync(obtenerCuentaASincronizar(context),
                 context.getString(R.string.provider_authority), bundle);
     }
-
     /**
      * Crea u obtiene una cuenta existente
      *

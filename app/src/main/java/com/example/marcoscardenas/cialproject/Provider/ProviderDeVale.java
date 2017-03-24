@@ -124,6 +124,82 @@ public class ProviderDeVale extends ContentProvider {
                         resolver,
                         ContractParaSurtidor.CONTENT_URI_SURTIDOR);
                 break;
+            case ContractParaVehiculos.ALLROWS_VEHICULO:
+                // Consultando todos los registros
+                c = db.query(ContractParaVehiculos.VEHICULO, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaVehiculos.CONTENT_URI_VEHICULO);
+                break;
+            case ContractParaVehiculos.SINGLE_ROW_VEHICULO:
+                // Consultando un solo registro basado en el Id del Uri
+                long idVehiculo = ContentUris.parseId(uri);
+                c = db.query(ContractParaVehiculos.VEHICULO, projection,
+                        "codigo" + " = " + idVehiculo,
+                        selectionArgs, null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaVehiculos.CONTENT_URI_VEHICULO);
+                break;
+            case ContractParaUsuarios.ALLROWS_USUARIO:
+                // Consultando todos los registros
+                c = db.query(ContractParaUsuarios.USUARIO, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaUsuarios.CONTENT_URI_USUARIO);
+                break;
+            case ContractParaUsuarios.SINGLE_ROW_USUARIO:
+                // Consultando un solo registro basado en el Id del Uri
+                long idUsuario = ContentUris.parseId(uri);
+                c = db.query(ContractParaUsuarios.USUARIO, projection,
+                        "indice" + " = " + idUsuario,
+                        selectionArgs, null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaUsuarios.CONTENT_URI_USUARIO);
+                break;
+            case ContractParaMes.ALLROWS_MES:
+                // Consultando todos los registros
+                c = db.query(ContractParaMes.MES, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaMes.CONTENT_URI_MES);
+                break;
+            case ContractParaMes.SINGLE_ROW_MES:
+                // Consultando un solo registro basado en el Id del Uri
+                long idMes = ContentUris.parseId(uri);
+                c = db.query(ContractParaMes.MES, projection,
+                        "id" + " = " + idMes,
+                        selectionArgs, null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaMes.CONTENT_URI_MES);
+                break;
+            case ContractParaProveedor.ALLROWS_PROVEEDOR:
+                // Consultando todos los registros
+                c = db.query(ContractParaProveedor.PROVEEDOR, projection,
+                        selection, selectionArgs,
+                        null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaProveedor.CONTENT_URI_PROVEEDOR);
+                break;
+            case ContractParaProveedor.SINGLE_ROW_PROVEEDOR:
+                // Consultando un solo registro basado en el Id del Uri
+                long idProveedor = ContentUris.parseId(uri);
+                c = db.query(ContractParaProveedor.PROVEEDOR, projection,
+                        "rut" + " = " + idProveedor,
+                        selectionArgs, null, null, sortOrder);
+                c.setNotificationUri(
+                        resolver,
+                        ContractParaProveedor.CONTENT_URI_PROVEEDOR);
+                break;
             default:
                 throw new IllegalArgumentException("URI no soportada: " + uri);
         }
@@ -217,6 +293,93 @@ public class ProviderDeVale extends ContentProvider {
                 }
                 throw new SQLException("Falla al insertar fila en : " + uri);
 
+            case ContractParaVehiculos.ALLROWS_VEHICULO:
+                if (ContractParaVehiculos.uriMatcher.match(uri) != ContractParaVehiculos.ALLROWS_VEHICULO) {
+                    throw new IllegalArgumentException("URI desconocida : " + uri);
+                }
+                ContentValues contentValues_vehiculo;
+                if (values != null) {
+                    contentValues_vehiculo = new ContentValues(values);
+                } else {
+                    contentValues_vehiculo = new ContentValues();
+                }
+
+                // Inserción de nueva fila
+                SQLiteDatabase db_vehiculo = conexion.getWritableDatabase();
+                long rowId_vehiculo = db_vehiculo.insert(ContractParaVehiculos.VEHICULO, null, contentValues_vehiculo);
+                if (rowId_vehiculo > 0) {
+                    Uri uri_vehiculo = ContentUris.withAppendedId(
+                            ContractParaSurtidor.CONTENT_URI_SURTIDOR, rowId_vehiculo);
+                    resolver.notifyChange(uri_vehiculo, null, false);
+                    return uri_vehiculo;
+                }
+                throw new SQLException("Falla al insertar fila en : " + uri);
+
+            case ContractParaUsuarios.ALLROWS_USUARIO:
+                if (ContractParaUsuarios.uriMatcher.match(uri) != ContractParaUsuarios.ALLROWS_USUARIO) {
+                    throw new IllegalArgumentException("URI desconocida : " + uri);
+                }
+                ContentValues contentValues_usuario;
+                if (values != null) {
+                    contentValues_usuario = new ContentValues(values);
+                } else {
+                    contentValues_usuario = new ContentValues();
+                }
+
+                // Inserción de nueva fila
+                SQLiteDatabase db_usuario = conexion.getWritableDatabase();
+                long rowId_usuario = db_usuario.insert(ContractParaUsuarios.USUARIO, null, contentValues_usuario);
+                if (rowId_usuario > 0) {
+                    Uri uri_usuario = ContentUris.withAppendedId(
+                            ContractParaUsuarios.CONTENT_URI_USUARIO, rowId_usuario);
+                    resolver.notifyChange(uri_usuario, null, false);
+                    return uri_usuario;
+                }
+                throw new SQLException("Falla al insertar fila en : " + uri);
+
+            case ContractParaMes.ALLROWS_MES:
+                if (ContractParaMes.uriMatcher.match(uri) != ContractParaMes.ALLROWS_MES) {
+                    throw new IllegalArgumentException("URI desconocida : " + uri);
+                }
+                ContentValues contentValues_mes;
+                if (values != null) {
+                    contentValues_mes = new ContentValues(values);
+                } else {
+                    contentValues_mes = new ContentValues();
+                }
+
+                // Inserción de nueva fila
+                SQLiteDatabase db_mes = conexion.getWritableDatabase();
+                long rowId_mes = db_mes.insert(ContractParaMes.MES, null, contentValues_mes);
+                if (rowId_mes > 0) {
+                    Uri uri_mes = ContentUris.withAppendedId(
+                            ContractParaMes.CONTENT_URI_MES, rowId_mes);
+                    resolver.notifyChange(uri_mes, null, false);
+                    return uri_mes;
+                }
+                throw new SQLException("Falla al insertar fila en : " + uri);
+
+            case ContractParaProveedor.ALLROWS_PROVEEDOR:
+                if (ContractParaProveedor.uriMatcher.match(uri) != ContractParaProveedor.ALLROWS_PROVEEDOR) {
+                    throw new IllegalArgumentException("URI desconocida : " + uri);
+                }
+                ContentValues contentValues_proveedor;
+                if (values != null) {
+                    contentValues_proveedor = new ContentValues(values);
+                } else {
+                    contentValues_proveedor = new ContentValues();
+                }
+
+                // Inserción de nueva fila
+                SQLiteDatabase db_proveedor = conexion.getWritableDatabase();
+                long rowId_proveedor = db_proveedor.insert(ContractParaProveedor.PROVEEDOR, null, contentValues_proveedor);
+                if (rowId_proveedor > 0) {
+                    Uri uri_proveedor = ContentUris.withAppendedId(
+                            ContractParaProveedor.CONTENT_URI_PROVEEDOR, rowId_proveedor);
+                    resolver.notifyChange(uri_proveedor, null, false);
+                    return uri_proveedor;
+                }
+                throw new SQLException("Falla al insertar fila en : " + uri);
             default:
                 throw new IllegalArgumentException("Tipo de gasto desconocido: " + uri);
         }
@@ -281,6 +444,70 @@ public class ProviderDeVale extends ContentProvider {
                     resolver.
                             notifyChange(uri, null, false);
                     break;
+                case ContractParaVehiculos.ALLROWS_VEHICULO:
+                    affected = db.delete(ContractParaVehiculos.VEHICULO,
+                            selection,
+                            selectionArgs);
+                    break;
+                case ContractParaVehiculos.SINGLE_ROW_VEHICULO:
+                    long idVehiculo = ContentUris.parseId(uri);
+                    affected = db.delete(ContractParaVehiculos.VEHICULO,
+                            ContractParaVehiculos.Columnas.ID_REMOTA + "=" + idVehiculo
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    // Notificar cambio asociado a la uri
+                    resolver.
+                            notifyChange(uri, null, false);
+                    break;
+                case ContractParaUsuarios.ALLROWS_USUARIO:
+                    affected = db.delete(ContractParaUsuarios.USUARIO,
+                            selection,
+                            selectionArgs);
+                    break;
+                case ContractParaUsuarios.SINGLE_ROW_USUARIO:
+                    long idUsuario = ContentUris.parseId(uri);
+                    affected = db.delete(ContractParaUsuarios.USUARIO,
+                            ContractParaUsuarios.Columnas.ID_REMOTA + "=" + idUsuario
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    // Notificar cambio asociado a la uri
+                    resolver.
+                            notifyChange(uri, null, false);
+                    break;
+                case ContractParaMes.ALLROWS_MES:
+                    affected = db.delete(ContractParaMes.MES,
+                            selection,
+                            selectionArgs);
+                    break;
+                case ContractParaMes.SINGLE_ROW_MES:
+                    long idMes = ContentUris.parseId(uri);
+                    affected = db.delete(ContractParaMes.MES,
+                            ContractParaMes.Columnas.ID_REMOTA + "=" + idMes
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    // Notificar cambio asociado a la uri
+                    resolver.
+                            notifyChange(uri, null, false);
+                    break;
+                case ContractParaProveedor.ALLROWS_PROVEEDOR:
+                    affected = db.delete(ContractParaProveedor.PROVEEDOR,
+                            selection,
+                            selectionArgs);
+                    break;
+                case ContractParaProveedor.SINGLE_ROW_PROVEEDOR:
+                    long idProveedor = ContentUris.parseId(uri);
+                    affected = db.delete(ContractParaProveedor.PROVEEDOR,
+                            ContractParaProveedor.Columnas.ID_REMOTA + "=" + idProveedor
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    // Notificar cambio asociado a la uri
+                    resolver.
+                            notifyChange(uri, null, false);
+                    break;
                 default:
                     throw new IllegalArgumentException("Elemento vale desconocido: " +
                             uri);
@@ -329,11 +556,68 @@ public class ProviderDeVale extends ContentProvider {
                                     " AND (" + selection + ')' : ""),
                             selectionArgs);
                     break;
+
                 case ContractParaSurtidor.ALLROWS_SURTIDOR:
                     affected = db.update(ContractParaSurtidor.SURTIDOR, values,
                             selection, selectionArgs);
                     break;
+                case ContractParaVehiculos.SINGLE_ROW_VEHICULO:
+                    String idVehiculo = uri.getPathSegments().get(1);
+                    Log.i("ID VEHICULO",idVehiculo);
+                    affected = db.update(ContractParaVehiculos.VEHICULO, values,
+                            ContractParaVehiculos.Columnas.ID_REMOTA + "=" + idVehiculo
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    break;
 
+                case ContractParaVehiculos.ALLROWS_VEHICULO:
+                    affected = db.update(ContractParaVehiculos.VEHICULO, values,
+                            selection, selectionArgs);
+                    break;
+
+                case ContractParaUsuarios.SINGLE_ROW_USUARIO:
+                    String idUsuario = uri.getPathSegments().get(1);
+                    Log.i("ID USUARIO",idUsuario);
+                    affected = db.update(ContractParaUsuarios.USUARIO, values,
+                            ContractParaUsuarios.Columnas.ID_REMOTA + "=" + idUsuario
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    break;
+
+                case ContractParaUsuarios.ALLROWS_USUARIO:
+                    affected = db.update(ContractParaUsuarios.USUARIO, values,
+                            selection, selectionArgs);
+                    break;
+                case ContractParaMes.SINGLE_ROW_MES:
+                    String idMes = uri.getPathSegments().get(1);
+                    Log.i("ID MES",idMes);
+                    affected = db.update(ContractParaMes.MES, values,
+                            ContractParaMes.Columnas.ID_REMOTA + "=" + idMes
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    break;
+
+                case ContractParaMes.ALLROWS_MES:
+                    affected = db.update(ContractParaMes.MES, values,
+                            selection, selectionArgs);
+                    break;
+                case ContractParaProveedor.SINGLE_ROW_PROVEEDOR:
+                    String idProveedor = uri.getPathSegments().get(1);
+                    Log.i("ID PROVEEDOR",idProveedor);
+                    affected = db.update(ContractParaProveedor.PROVEEDOR, values,
+                            ContractParaProveedor.Columnas.ID_REMOTA + "=" + idProveedor
+                                    + (!TextUtils.isEmpty(selection) ?
+                                    " AND (" + selection + ')' : ""),
+                            selectionArgs);
+                    break;
+
+                case ContractParaProveedor.ALLROWS_PROVEEDOR:
+                    affected = db.update(ContractParaProveedor.PROVEEDOR, values,
+                            selection, selectionArgs);
+                    break;
                 default:
                     throw new IllegalArgumentException("URI desconocida: " + uri);
             }

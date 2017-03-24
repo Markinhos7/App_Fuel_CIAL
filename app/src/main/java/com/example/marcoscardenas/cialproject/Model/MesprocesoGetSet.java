@@ -5,30 +5,61 @@ package com.example.marcoscardenas.cialproject.Model;
  */
 
 public class MesprocesoGetSet {
-    String nombre;
-    int id;
+    String proceso;
+    String id;
+    int abierta;
+    int mes;
+    int ano;
 
-    public MesprocesoGetSet(int id,String nombre) {
-        this.nombre = nombre;
-        this.id = id;
-    }
 
     public MesprocesoGetSet() {
     }
 
-    public String getNombre() {
-        return nombre;
+    public MesprocesoGetSet(String proceso, String id, int abierta, int mes, int ano) {
+        this.proceso = proceso;
+        this.id = id;
+        this.abierta = abierta;
+        this.mes = mes;
+        this.ano = ano;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getProceso() {
+        return proceso;
     }
 
-    public int getId() {
+    public void setProceso(String proceso) {
+        this.proceso = proceso;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public int getAbierta() {
+        return abierta;
+    }
+
+    public void setAbierta(int abierta) {
+        this.abierta = abierta;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
     }
 }

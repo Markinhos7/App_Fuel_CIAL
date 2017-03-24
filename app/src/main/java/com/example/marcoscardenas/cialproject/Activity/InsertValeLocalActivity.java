@@ -17,8 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
-import com.example.marcoscardenas.cialproject.JsonParse;
-import com.example.marcoscardenas.cialproject.Model.ChoferGetSet;
+import com.example.marcoscardenas.cialproject.Model.ProveedorGetSet;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
 import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
@@ -51,7 +50,6 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
     private EditText editText_num_vale;
     private EditText editText_observaciones;
     private Button button_guardar;
-    private JsonParse jp =new JsonParse();
     private TextView textView_fecha;
     private ArrayList<ObraGetSet> lista_obra         = new ArrayList<ObraGetSet>();
     private ArrayList<MesprocesoGetSet> lista_mes    = new ArrayList<MesprocesoGetSet>();
@@ -95,7 +93,7 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
 
 
          c = new Conexion(this);
-        ArrayList<ChoferGetSet> chofer  = c.getChofer(autoComplete_chofer.getText().toString());
+        ArrayList<ProveedorGetSet> chofer  = c.getChofer(autoComplete_chofer.getText().toString());
         vehiculo_list  = c.getVehiculo(autoComplete_vehiculos.getText().toString());
         List<String> array_chofer = new ArrayList<String>();
         List<String> array_vehiculo = new ArrayList<String>();
@@ -151,7 +149,7 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
 
         for (int i = 0; i < vehiculo_list.size(); i++) {
             if (vehiculo_list.get(i).getPatente() == vehiculo){
-                codigo_vehiculo = vehiculo_list.get(i).getCodigo();
+                codigo_vehiculo = Integer.parseInt(vehiculo_list.get(i).getCodigo());
              }
 
         }
@@ -160,8 +158,8 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
                 codigo_obra = Integer.parseInt(lista_obra.get(i).getCod_obra());
             }
         }for (int i = 0; i < lista_mes.size(); i++) {
-            if(lista_mes.get(i).getNombre() == mes_proceso){
-                codigo_mes = lista_mes.get(i).getId();
+            if(lista_mes.get(i).getProceso() == mes_proceso){
+                codigo_mes = Integer.parseInt(lista_mes.get(i).getId());
             }
         }for (int i = 0; i < lista_surtidor.size(); i++) {
             if(lista_surtidor.get(i).getDescripcion() == surtidor){
@@ -223,7 +221,7 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
             lables_obra.add(obra.get(i).getNombre());
         }
         for (int i = 0; i < mes.size(); i++) {
-            lables_mes.add(mes.get(i).getNombre());
+            lables_mes.add(mes.get(i).getProceso());
         }
         for (int i = 0; i < surtidor.size(); i++) {
             lables_surtidor.add(surtidor.get(i).getDescripcion());

@@ -4,20 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import com.example.marcoscardenas.cialproject.Model.ChoferGetSet;
-import com.example.marcoscardenas.cialproject.Model.GetVale;
+import com.example.marcoscardenas.cialproject.Model.ProveedorGetSet;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
 import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
-import com.example.marcoscardenas.cialproject.Model.UsuarioGetSet;
 import com.example.marcoscardenas.cialproject.Model.VehiculoGetSet;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -44,7 +38,7 @@ public class Conexion extends SQLiteAssetHelper{
         int mes = fecha.get(Calendar.MONTH) + 1;
 
         SQLiteDatabase db = getReadableDatabase();
-        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where cod_empresa = 275 and mes = 0"+ mes +" and ano="+ año +"  " + "and  abierta = 1 and agrupacion = 'Combustibles' ";
+        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where  mes = 0"+ mes +" and ano="+ año +"  " + "and  abierta = 1";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -52,7 +46,7 @@ public class Conexion extends SQLiteAssetHelper{
 
                 MesprocesoGetSet new_mes = new MesprocesoGetSet();
 
-                new_mes.setNombre(cursor.getString(cursor.getColumnIndex("proceso")));
+                new_mes.setProceso(cursor.getString(cursor.getColumnIndex("proceso")));
 
                 String a = Integer.toString(Array_mes.size());
                 Array_mes.add(new_mes);
@@ -116,9 +110,9 @@ public class Conexion extends SQLiteAssetHelper{
         return Array_obra;
     }
 
-    public ArrayList<ChoferGetSet> getChofer(String usuario) {
+    public ArrayList<ProveedorGetSet> getChofer(String usuario) {
 
-        ArrayList<ChoferGetSet> Array_chofer = new ArrayList<>();
+        ArrayList<ProveedorGetSet> Array_chofer = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
         String selectQuery = "select rut, razon_social from proveedores where usuario_petroleo = 'True' and  (razon_social like '%" + usuario + "%' or rut like '% " + usuario +"%');";
@@ -126,7 +120,7 @@ public class Conexion extends SQLiteAssetHelper{
         if (cursor != null && cursor.moveToFirst()) {
             do {
 
-                ChoferGetSet chofer = new ChoferGetSet();
+                ProveedorGetSet chofer = new ProveedorGetSet();
 
                 chofer.setRut(cursor.getString(cursor.getColumnIndex("rut")));
                 chofer.setRazon_social(cursor.getString(cursor.getColumnIndex("razon_social")));
@@ -172,7 +166,7 @@ public class Conexion extends SQLiteAssetHelper{
                 VehiculoGetSet vehiculo = new VehiculoGetSet();
 
                 vehiculo.setPatente(cursor.getString(cursor.getColumnIndex("patente")));
-                vehiculo.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                vehiculo.setCodigo(cursor.getString(cursor.getColumnIndex("codigo")));
                 vehiculo.setNombre_vehiculo(cursor.getString(cursor.getColumnIndex("razon_social")));
 
                 String a = Integer.toString(Array_vehiculo.size());

@@ -12,7 +12,6 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,12 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.marcoscardenas.cialproject.Adapter.SuggestionAdapter;
-import com.example.marcoscardenas.cialproject.Adapter.SuggestionChoferAdapter;
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 import com.example.marcoscardenas.cialproject.DateDialog;
-import com.example.marcoscardenas.cialproject.JsonParse;
-import com.example.marcoscardenas.cialproject.Model.ChoferGetSet;
+import com.example.marcoscardenas.cialproject.Model.ProveedorGetSet;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
 import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
@@ -40,7 +36,6 @@ import com.example.marcoscardenas.cialproject.R;
 import com.example.marcoscardenas.cialproject.Sync.SyncAdapter;
 import com.example.marcoscardenas.cialproject.Utilidades;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.ParseException;
@@ -67,7 +62,6 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
     private EditText editText_num_vale;
     private EditText editText_observaciones;
     private Button button_guardar;
-    private JsonParse jp =new JsonParse();
     private TextView textView_fecha;
     private ArrayList<ObraGetSet> lista_obra         = new ArrayList<ObraGetSet>();
     private ArrayList<MesprocesoGetSet> lista_mes    = new ArrayList<MesprocesoGetSet>();
@@ -106,7 +100,7 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
 
 
         c = new Conexion(this);
-        ArrayList<ChoferGetSet> chofer  = c.getChofer(autoComplete_chofer.getText().toString());
+        ArrayList<ProveedorGetSet> chofer  = c.getChofer(autoComplete_chofer.getText().toString());
         vehiculo_list  = c.getVehiculo(autoComplete_vehiculos.getText().toString());
         List<String> array_chofer = new ArrayList<String>();
         List<String> array_vehiculo = new ArrayList<String>();
@@ -207,8 +201,8 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
                  codigo_obra =lista_obra.get(i).getCod_obra();
             }
         }for (int i = 0; i < lista_mes.size(); i++) {
-            if(lista_mes.get(i).getNombre() == mes_proceso){
-                codigo_mes = Integer.toString(lista_mes.get(i).getId());
+            if(lista_mes.get(i).getProceso() == mes_proceso){
+                codigo_mes = lista_mes.get(i).getId();
             }
         }for (int i = 0; i < lista_surtidor.size(); i++) {
             if(lista_surtidor.get(i).getDescripcion() == surtidor){
@@ -366,7 +360,7 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
             lables_obra.add(obra.get(i).getNombre());
         }
         for (int i = 0; i < mes.size(); i++) {
-            lables_mes.add(mes.get(i).getNombre());
+            lables_mes.add(mes.get(i).getProceso());
         }
         for (int i = 0; i < surtidor.size(); i++) {
             lables_surtidor.add(surtidor.get(i).getDescripcion());

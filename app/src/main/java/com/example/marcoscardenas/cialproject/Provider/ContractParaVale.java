@@ -89,7 +89,15 @@ public class ContractParaVale {
             uriMatcher.addURI(AUTHORITY, OBRA + "/#", SINGLE_ROW_OBRA);
             uriMatcher.addURI(AUTHORITY, OBRA , ALLROWS_OBRA);
             uriMatcher.addURI(AUTHORITY, SURTIDOR + "/#", SINGLE_ROW_SURTIDOR);
-            uriMatcher.addURI(AUTHORITY,SURTIDOR , ALLROWS_SURTIDOR);
+            uriMatcher.addURI(AUTHORITY, SURTIDOR , ALLROWS_SURTIDOR);
+            uriMatcher.addURI(AUTHORITY,ContractParaUsuarios.USUARIO , ContractParaUsuarios.ALLROWS_USUARIO);
+            uriMatcher.addURI(AUTHORITY,ContractParaUsuarios.USUARIO + "/#", ContractParaUsuarios.SINGLE_ROW_USUARIO);
+            uriMatcher.addURI(AUTHORITY,ContractParaVehiculos.VEHICULO , ContractParaVehiculos.ALLROWS_VEHICULO);
+            uriMatcher.addURI(AUTHORITY,ContractParaVehiculos.VEHICULO + "/#", ContractParaVehiculos.SINGLE_ROW_VEHICULO);
+            uriMatcher.addURI(AUTHORITY,ContractParaMes.MES , ContractParaMes.ALLROWS_MES);
+            uriMatcher.addURI(AUTHORITY, ContractParaMes.MES + "/#", ContractParaMes.SINGLE_ROW_MES);
+            uriMatcher.addURI(AUTHORITY,ContractParaProveedor.PROVEEDOR , ContractParaProveedor.ALLROWS_PROVEEDOR);
+            uriMatcher.addURI(AUTHORITY, ContractParaProveedor.PROVEEDOR + "/#", ContractParaProveedor.SINGLE_ROW_PROVEEDOR);
         }
 
         // Valores para la columna ESTADO
