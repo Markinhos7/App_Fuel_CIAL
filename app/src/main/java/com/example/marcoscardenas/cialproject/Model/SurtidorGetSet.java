@@ -8,14 +8,24 @@ public class SurtidorGetSet {
     String descripcion;
     String codigo;
     int vigente;
+    int id_categoria;
 
 
     public SurtidorGetSet() {
     }
-    public SurtidorGetSet(String descripcion, String codigo, int vigente) {
+    public SurtidorGetSet(String descripcion, String codigo, int vigente, int id_categoria) {
         this.descripcion = descripcion;
         this.codigo = codigo;
         this.vigente = vigente;
+        this.id_categoria = id_categoria;
+    }
+
+    public int getId_categoria() {
+        return id_categoria;
+    }
+
+    public void setId_categoria(int id_categoria) {
+        this.id_categoria = id_categoria;
     }
 
     public String getDescripcion() {

@@ -71,6 +71,7 @@ public class ContractParaSurtidor {
         public final static String CODIGO = "codigo";
         public final static String DESCRIPCION = "descripcion";
         public final static String VIGENTE = "vigente";
+        public final static String ID_CATEGORIA = "id_categoria";
 
         public static final String ESTADO = "estado";
         public static final String ID_REMOTA = "idRemota";

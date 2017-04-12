@@ -59,14 +59,17 @@ public class SyncAdapterSurtidor {
             ContractParaSurtidor.Columnas.CODIGO,
             ContractParaSurtidor.Columnas.DESCRIPCION,
             ContractParaSurtidor.Columnas.VIGENTE,
+            ContractParaSurtidor.Columnas.ID_CATEGORIA,
             ContractParaSurtidor.Columnas.ID_REMOTA,
 
     };
 
     // Indices para las columnas indicadas en la proyección
     public static final int COLUMNA_CODIGO = 0;
-    public static final int COLUMNA_ID_REMOTA = 3;
+    public static final int COLUMNA_ID_REMOTA = 4;
     public static final int COLUMNA_DESCRIPCION = 1;
     public static final int COLUMNA_VIGENTE = 2;
+    public static final int COLUMNA_ID_CATEGORIA = 3;
+
 
 }

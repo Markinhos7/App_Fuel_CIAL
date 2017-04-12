@@ -192,15 +192,34 @@ public class InsertValeLocalActivity extends AppCompatActivity implements Adapte
         values_detalle.put(ContractParaVale.Columnas.PRODUCTO, 31);
         values_detalle.put(ContractParaVale.Columnas.VALE_ENC,100000000);
 
-        c.Insertar(values_encabezado,values_detalle);
+        c.InsertVale(values_encabezado,values_detalle);
+        while (isOnlineNet() == true ){
+            SyncAdapter.sincronizarAhora(this,true);
+
+        }
         //getContentResolver().insert(ContractParaVale.CONTENT_URI, values_encabezado);
-        SyncAdapter.sincronizarAhora(this,true);
+
 
         if (Utilidades.materialDesign())
             finishAfterTransition();
         else finish();
 
         }
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
+
+            int val           = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     private void populateSpinner() {
         Conexion c = new Conexion(this);

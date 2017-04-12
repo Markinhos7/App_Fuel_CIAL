@@ -4,31 +4,25 @@ package com.example.marcoscardenas.cialproject.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.R;
 import com.example.marcoscardenas.cialproject.Sync.SyncAdapter;
-import com.example.marcoscardenas.cialproject.Sync.SyncAdapterObra;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
-    private TextView emptyView;
     private Button button_ingreso;
+    SessionManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +30,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setToolbar();
         Conexion c = new Conexion(this);
-        MesprocesoGetSet m = new MesprocesoGetSet();
-
 
         ArrayList<MesprocesoGetSet> mes = new ArrayList<MesprocesoGetSet>();
         mes = c.getMes_proceso();
-        MesprocesoGetSet mes1 = new MesprocesoGetSet();
         mes.size();
         SyncAdapter.inicializarSyncAdapter(this);
-        //SyncAdapterObra.inicializarSyncAdapter(this);
 
+        manager = new SessionManager();
 
+        Button button = (Button) findViewById(R.id.btn_logout);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manager.setPreferences(MainActivity.this, "status", "0");
+                //finish();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+                startActivity(intent);
+            }
+        });
         button_ingreso = (Button) findViewById(R.id.fab);
         button_ingreso.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             SyncAdapter.sincronizarAhora(this, false);
             Toast toast1 =
                     Toast.makeText(getApplicationContext(),
-                            "Sincronizando", Toast.LENGTH_SHORT);
+                            "Sincronizando...", Toast.LENGTH_SHORT);
 
             toast1.show();
 
@@ -110,6 +112,16 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        System.exit(0);
+    }
 }
 

@@ -14,7 +14,7 @@ public class Utilidades {
     // Indices para las columnas indicadas en la proyección
 
     public static final int COLUMNA_ID = 0;
-    public static final int COLUMNA_ID_REMOTA = 14;
+    public static final int COLUMNA_ID_REMOTA = 15;
     public static final int COLUMNA_MES_PROCESO = 1;
     public static final int COLUMNA_SURTIDOR = 2;
     public static final int COLUMNA_VEHICULO = 3;
@@ -28,6 +28,8 @@ public class Utilidades {
     public static final int COLUMNA_HOROMETRO = 11;
     public static final int COLUMNA_KILOMETRO = 12;
     public static final int COLUMNA_OBSERVACIONES = 13;
+    public static final int COLUMNA_CANTIDAD= 14;
+
     /**
      * Determina si la aplicación corre en versiones superiores o iguales
      * a Android LOLLIPOP
@@ -61,20 +63,22 @@ public class Utilidades {
         String horometro ;
         String kilometro ;
         String observaciones ;
+        String cantidad;
 
-        mes_proceso = c.getString(COLUMNA_MES_PROCESO);
-        surtidor    = c.getString(COLUMNA_SURTIDOR);
-        vehiculo    = c.getString(COLUMNA_VEHICULO);
-        obra        = c.getString(COLUMNA_OBRA);
-        recibe      = c.getString(COLUMNA_RECIBE);
-        usuario     = c.getString(COLUMNA_USUARIO);
-        fecha       = c.getString(COLUMNA_FECHA);
-        vale        = c.getString(COLUMNA_VALE);
-        guia        = c.getString(COLUMNA_GUIA);
-        sello       = c.getString(COLUMNA_SELLO);
-        horometro   = c.getString(COLUMNA_HOROMETRO);
-        kilometro   = c.getString(COLUMNA_KILOMETRO);
+        mes_proceso   = c.getString(COLUMNA_MES_PROCESO);
+        surtidor      = c.getString(COLUMNA_SURTIDOR);
+        vehiculo      = c.getString(COLUMNA_VEHICULO);
+        obra          = c.getString(COLUMNA_OBRA);
+        recibe        = c.getString(COLUMNA_RECIBE);
+        usuario       = c.getString(COLUMNA_USUARIO);
+        fecha         = c.getString(COLUMNA_FECHA);
+        vale          = c.getString(COLUMNA_VALE);
+        guia          = c.getString(COLUMNA_GUIA);
+        sello         = c.getString(COLUMNA_SELLO);
+        horometro     = c.getString(COLUMNA_HOROMETRO);
+        kilometro     = c.getString(COLUMNA_KILOMETRO);
         observaciones = c.getString(COLUMNA_OBSERVACIONES);
+        cantidad      = c.getString(COLUMNA_CANTIDAD);
 
 
         try {
@@ -92,6 +96,7 @@ public class Utilidades {
             jObject.put(ContractParaVale.Columnas.HOROMETRO, horometro);
             jObject.put(ContractParaVale.Columnas.KILOMETRO, kilometro);
             jObject.put(ContractParaVale.Columnas.OBSERVACIONES, observaciones);
+            jObject.put(ContractParaVale.Columnas.CANTIDAD,cantidad);
 
         } catch (JSONException e) {
             e.printStackTrace();

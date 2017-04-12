@@ -4,18 +4,28 @@ public class VehiculoGetSet {
 
 	String patente,nombre_vehiculo;
 	String codigo;
-	String fecha;
+	String fecha_termino_contrato;
 	String forma_pago;
 	String valor_pago;
+	String termino_contrato;
 
 	public VehiculoGetSet() {
 	}
 
-	public VehiculoGetSet(String patente, String nombre_vehiculo, String codigo) {
+	public VehiculoGetSet(String patente, String nombre_vehiculo, String codigo ,String fecha_termino_contrato) {
 		this.patente = patente;
 		this.nombre_vehiculo = nombre_vehiculo;
 		this.codigo = codigo;
+		this.fecha_termino_contrato = fecha_termino_contrato;
 
+	}
+
+	public String getfecha_termino_contrato() {
+		return fecha_termino_contrato;
+	}
+
+	public void setfecha_termino_contrato(String fecha_termino_contrato) {
+		this.fecha_termino_contrato = fecha_termino_contrato;
 	}
 
 	public String getPatente() {
@@ -40,14 +50,6 @@ public class VehiculoGetSet {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
-	}
-
-	public String getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(String fecha) {
-		this.fecha = fecha;
 	}
 
 	public String getForma_pago() {

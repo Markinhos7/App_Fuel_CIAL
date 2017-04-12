@@ -38,7 +38,7 @@ public class Conexion extends SQLiteAssetHelper{
         int mes = fecha.get(Calendar.MONTH) + 1;
 
         SQLiteDatabase db = getReadableDatabase();
-        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where  mes = 0"+ mes +" and ano="+ año +"  " + "and  abierta = 1";
+        String selectQuery = "SELECT proceso FROM comb2_mes_y_ano_proceso where  mes = 0"+ mes +" and ano = "+ año +" and  abierta = 1";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -139,26 +139,15 @@ public class Conexion extends SQLiteAssetHelper{
 
         SQLiteDatabase db = getReadableDatabase();
         String selectQuery = "SELECT \n" +
-                "            vehiculos.codigo, \n" +
-                "            vehiculos.patente,\n" +
-                "            vehiculos.cubicaje,\n" +
-                "              marca || ' '||  modelo   AS nombre_vehiculo,\n" +
-                "            proveedores.razon_social,\n" +
-                "            proveedores.rut,\n" +
-                "            proveedores.direccion,\n" +
-                "            proveedores.fono1\n" +
+                "            codigo, \n" +
+                "            patente\n" +
                 "            FROM \n" +
                 "                vehiculos \n" +
-                "            INNER JOIN proveedores ON\n" +
-                "            (\n" +
-                "                vehiculos.chofer_x_defecto = proveedores.rut\n" +
-                "            )\n" +
                 "            WHERE \n" +
-                "                vehiculos.patente like '%"+ patente +"%' \n" +
-                "            AND vehiculos.fecha_termino_contrato >= date('now') \n" +
-                "            AND vehiculos.forma_pago IS NOT NULL \n" +
-                "            AND vehiculos.valor_pago IS NOT NULL\n" +
-                "            order by patente asc;";
+                "            patente like '%"+ patente +"%' \n" +
+                "            AND fecha_termino_contrato >= date() \n" +
+                "            AND forma_pago IS NOT NULL \n" +
+                "            AND valor_pago IS NOT NULL;";
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -167,7 +156,6 @@ public class Conexion extends SQLiteAssetHelper{
 
                 vehiculo.setPatente(cursor.getString(cursor.getColumnIndex("patente")));
                 vehiculo.setCodigo(cursor.getString(cursor.getColumnIndex("codigo")));
-                vehiculo.setNombre_vehiculo(cursor.getString(cursor.getColumnIndex("razon_social")));
 
                 String a = Integer.toString(Array_vehiculo.size());
 
@@ -193,7 +181,7 @@ public class Conexion extends SQLiteAssetHelper{
         return salida;
     }
 
-    public void Insertar(ContentValues vale_encabezado, ContentValues vale_detalle) {
+    public void InsertVale(ContentValues vale_encabezado, ContentValues vale_detalle) {
 
         SQLiteDatabase db = getReadableDatabase();
         db.insert(TABLE_NAME_ENCABEZADO, null, vale_encabezado);
@@ -202,7 +190,91 @@ public class Conexion extends SQLiteAssetHelper{
         db.close();
 
     }
+    public String SearchVehiculo(String patente){
+
+        String id_vehiculo = "";
+        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "SELECT \n" +
+                "            idRemota, \n" +
+                "            patente\n" +
+                "            FROM \n" +
+                "                vehiculos \n" +
+                "            WHERE \n" +
+                "            patente like '%"+ patente +"%' \n" +
+                "            AND fecha_termino_contrato >= date() \n" +
+                "            AND forma_pago IS NOT NULL \n" +
+                "            AND valor_pago IS NOT NULL;";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
 
 
+                id_vehiculo = cursor.getString(cursor.getColumnIndex("idRemota"));
+
+
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return id_vehiculo;
+
+    }
+    public String SearchObra(String obra){
+
+        String id_obra = "";
+        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "Select idRemota from obras where nombre = '"+obra + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+
+                id_obra = cursor.getString(cursor.getColumnIndex("idRemota"));
+
+
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return id_obra;
+
+    }
+    public String SearchSurtidor(String surtidor){
+
+            String id_surtidor = "";
+            SQLiteDatabase db = getReadableDatabase();
+            String selectQuery = "Select idRemota from surtidores where `descripcion` = '"+surtidor+"'";
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+
+                    id_surtidor = cursor.getString(cursor.getColumnIndex("idRemota"));
+
+
+                } while (cursor.moveToNext());
+            }
+            db.close();
+            return id_surtidor;
+
+        }
+
+    public String SearchMes(String mes){
+
+        String id_mes = "";
+        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "Select idRemota from comb2_mes_y_ano_proceso where `proceso` = '"+mes+"'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+
+                id_mes = cursor.getString(cursor.getColumnIndex("idRemota"));
+
+
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return id_mes;
+
+    }
 
 }

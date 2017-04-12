@@ -21,12 +21,13 @@ public class GetVale {
     public  int contador_hr;
     public  int contador_km;
     public  String observaciones ;
+    public int cantidad;
 
     public GetVale() {
 
     }
 
-    public GetVale(String id, int id_mes_proceso, int id_surtidor, int id_vehiculo, int id_obra, String rut_recibe, String usuario_crea, String fecha_crea, int numero_vale, int numero_guia_proveedor, int numero_sello, int contador_hr, int contador_km, String observaciones) {
+    public GetVale(String id, int id_mes_proceso, int id_surtidor, int id_vehiculo, int id_obra, String rut_recibe, String usuario_crea, String fecha_crea, int numero_vale, int numero_guia_proveedor, int numero_sello, int contador_hr, int contador_km, String observaciones,int cantidad) {
         this.Id = id;
         this.id_mes_proceso = id_mes_proceso;
         this.id_surtidor = id_surtidor;
@@ -41,6 +42,15 @@ public class GetVale {
         this.contador_hr = contador_hr;
         this.contador_km = contador_km;
         this.observaciones = observaciones;
+        this.cantidad = cantidad;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public String getId() {

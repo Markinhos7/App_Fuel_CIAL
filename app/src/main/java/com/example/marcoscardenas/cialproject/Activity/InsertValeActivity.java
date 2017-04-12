@@ -3,7 +3,7 @@ package com.example.marcoscardenas.cialproject.Activity;
 /**
  * Created by Marcos on 21-02-17.
  */
-import android.app.Activity;
+
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.marcoscardenas.cialproject.DataBase.Conexion;
 import com.example.marcoscardenas.cialproject.DateDialog;
 import com.example.marcoscardenas.cialproject.Model.ProveedorGetSet;
@@ -32,12 +32,10 @@ import com.example.marcoscardenas.cialproject.Model.SurtidorGetSet;
 import com.example.marcoscardenas.cialproject.Model.VehiculoGetSet;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
 import com.example.marcoscardenas.cialproject.R;
-
 import com.example.marcoscardenas.cialproject.Sync.SyncAdapter;
 import com.example.marcoscardenas.cialproject.Utilidades;
-
-import org.json.JSONException;
 import org.json.JSONObject;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,8 +45,6 @@ import java.util.List;
 
 public class InsertValeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , DatePickerDialog.OnDateSetListener {
 
-
-    private EditText editText;
     private AutoCompleteTextView autoComplete_vehiculos;
     private AutoCompleteTextView autoComplete_chofer;
     private Spinner spinner_obra;
@@ -186,99 +182,33 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
         String codigo_surtidor = "";
         String codigo_vehiculo ="";
 
-
-
         c = new Conexion(this);
         JSONObject jsonResponse = new JSONObject();
         HashMap<String, String> map = new HashMap<>();
-        for (int i = 0; i < lista_obra.size(); i++) {
-            if(lista_obra.get(i).getNombre() == obra){
-                codigo_obra = lista_obra.get(i).getCod_obra();
-            }
-        }
-        for (int i = 0; i < lista_obra.size(); i++) {
-            if(lista_obra.get(i).getNombre() == obra){
-                 codigo_obra =lista_obra.get(i).getCod_obra();
-            }
-        }for (int i = 0; i < lista_mes.size(); i++) {
-            if(lista_mes.get(i).getProceso() == mes_proceso){
-                codigo_mes = lista_mes.get(i).getId();
-            }
-        }for (int i = 0; i < lista_surtidor.size(); i++) {
-            if(lista_surtidor.get(i).getDescripcion() == surtidor){
-                codigo_surtidor = lista_surtidor.get(i).getCodigo();
-            }
-        }
 
-/*
-        map.put("mes_proceso", codigo_mes);
-        map.put("surtidor", codigo_surtidor);
-        map.put("patente", vehiculo);
-        map.put("obra",codigo_obra);
-        map.put("recibe", chofer);
-        map.put("usuario", "marcos.cardenas");
-        map.put("fecha", fecha);
-        map.put("vale", vale);
-        map.put("guia_proveedor",guia_despacho);
-        map.put("horometro", horometro);
-        map.put("kilometro", kilometro);
-        map.put("observaciones", observaciones);
-        map.put("numsello", num_sello);
-        map.put("cantidad", cantidad);
-        // Crear nuevo objeto Json basado en el mapa
-        JSONObject jobject = new JSONObject(map);
+        codigo_vehiculo = c.SearchVehiculo(vehiculo);
+        codigo_obra     = c.SearchObra(obra);
+        codigo_mes      = c.SearchMes(mes_proceso);
+        codigo_surtidor = c.SearchSurtidor(surtidor);
 
-        // Depurando objeto Json...
-        Log.d("INSERTAR", jobject.toString());
+        Date fechaActual = new Date();
 
+        //Formateando la fecha:
+        DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Actualizar datos en el servidor
-        VolleySingleton.getInstance(InsertValeActivity.this).addToRequestQueue(
-                new JsonObjectRequest(
-                        Request.Method.POST,
-                        Constantes.POST_VALE,
-                        jobject,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                procesarRespuesta(response);
-
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Error", "Error Volley: " + error.getMessage());
-                            }
-                        }
-
-                ) {
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        Map<String, String> headers = new HashMap<String, String>();
-                        headers.put("Content-Type", "application/json; charset=utf-8");
-                        headers.put("Accept", "application/json");
-                        return headers;
-                    }
-
-                    @Override
-                    public String getBodyContentType() {
-                        return "application/json; charset=utf-8" + getParamsEncoding();
-                    }
-                }
-        );*/
+        Log.d("fecha",formatoFecha.format(fechaActual)+formatoHora.format(fechaActual));
 
         ContentValues values_encabezado = new ContentValues();
         ContentValues values_detalle = new ContentValues();
 
         values_encabezado.put(ContractParaVale.Columnas.MES_PROCESO, codigo_mes);
-
         values_encabezado.put(ContractParaVale.Columnas.SURTIDOR,codigo_surtidor );
         values_encabezado.put(ContractParaVale.Columnas.VEHICULO, codigo_vehiculo);
         values_encabezado.put(ContractParaVale.Columnas.OBRA, codigo_obra);
         values_encabezado.put(ContractParaVale.Columnas.RECIBE, chofer);
         values_encabezado.put(ContractParaVale.Columnas.USUARIO, "marcos.cardenas");
-        values_encabezado.put(ContractParaVale.Columnas.FECHA, fecha);
+        values_encabezado.put(ContractParaVale.Columnas.FECHA, formatoFecha.format(fechaActual)+" "+formatoHora.format(fechaActual));
         values_encabezado.put(ContractParaVale.Columnas.VALE, vale);
         values_encabezado.put(ContractParaVale.Columnas.GUIA, guia_despacho);
         values_encabezado.put(ContractParaVale.Columnas.SELLO, num_sello);
@@ -286,12 +216,12 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
         values_encabezado.put(ContractParaVale.Columnas.KILOMETRO, kilometro);
         values_encabezado.put(ContractParaVale.Columnas.OBSERVACIONES, observaciones);
         values_encabezado.put(ContractParaVale.Columnas.PENDIENTE_INSERCION, 1);
+        values_encabezado.put(ContractParaVale.Columnas.CANTIDAD, cantidad);
 
-        values_detalle.put(ContractParaVale.Columnas.CANTIDAD, cantidad);
         values_detalle.put(ContractParaVale.Columnas.PRODUCTO, 31);
         values_detalle.put(ContractParaVale.Columnas.VALE_ENC,100000000);
 
-        c.Insertar(values_encabezado,values_detalle);
+        c.InsertVale(values_encabezado,values_detalle);
         //getContentResolver().insert(ContractParaVale.CONTENT_URI, values_encabezado);
         SyncAdapter.sincronizarAhora(this,true);
 
@@ -301,44 +231,7 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
 
     }
 
-    private void procesarRespuesta(JSONObject response) {
 
-        try {
-            // Obtener estado
-            String estado = response.getString("estado");
-            // Obtener mensaje
-            String mensaje = response.getString("mensaje");
-
-            switch (estado) {
-                case "1":
-                    // Mostrar mensaje
-                    Toast.makeText(
-                            InsertValeActivity.this,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
-                    // Enviar código de éxito
-                    InsertValeActivity.this.setResult(Activity.RESULT_OK);
-                    // Terminar actividad
-                    InsertValeActivity.this.finish();
-                    break;
-
-                case "2":
-                    // Mostrar mensaje
-                    Toast.makeText(
-                            InsertValeActivity.this,
-                            mensaje,
-                            Toast.LENGTH_LONG).show();
-                    // Enviar código de falla
-                    InsertValeActivity.this.setResult(Activity.RESULT_CANCELED);
-                    // Terminar actividad
-                    InsertValeActivity.this.finish();
-                    break;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
     private void populateSpinner() {
@@ -358,12 +251,15 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
 
         for (int i = 0; i < obra.size(); i++) {
             lables_obra.add(obra.get(i).getNombre());
+            Log.d("obra",obra.get(i).getNombre());
         }
         for (int i = 0; i < mes.size(); i++) {
             lables_mes.add(mes.get(i).getProceso());
+            Log.d("obra",mes.get(i).getProceso());
         }
         for (int i = 0; i < surtidor.size(); i++) {
             lables_surtidor.add(surtidor.get(i).getDescripcion());
+            Log.d("obra",surtidor.get(i).getDescripcion());
         }
 
         ArrayAdapter<String> spinnerAdapter_obra = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lables_obra);
@@ -382,6 +278,8 @@ public class InsertValeActivity extends AppCompatActivity implements AdapterView
         spinner_surtidor.setPrompt("Seleccionar Surtidor");
         int pos = 0;
         spinner_mes.setSelection(pos);
+        spinner_obra.setSelection(pos);
+        spinner_surtidor.setSelection(pos);
 
     }
     @Override

@@ -5,7 +5,6 @@ package com.example.marcoscardenas.cialproject.Sync;
  */
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.DownloadManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
@@ -20,14 +19,11 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.Volley;
 import com.example.marcoscardenas.cialproject.Model.GetVale;
 import com.example.marcoscardenas.cialproject.Model.MesprocesoGetSet;
 import com.example.marcoscardenas.cialproject.Model.ObraGetSet;
@@ -41,23 +37,15 @@ import com.example.marcoscardenas.cialproject.Provider.ContractParaProveedor;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaSurtidor;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaUsuarios;
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
-
 import com.example.marcoscardenas.cialproject.Provider.ContractParaVehiculos;
 import com.example.marcoscardenas.cialproject.R;
 import com.google.gson.Gson;
 import com.example.marcoscardenas.cialproject.Utilidades;
 import com.example.marcoscardenas.cialproject.Constantes;
-
-import com.example.marcoscardenas.cialproject.Provider.ContractParaVale;
-import com.example.marcoscardenas.cialproject.Model.GetVale;
-
 import com.example.marcoscardenas.cialproject.VolleySingleton;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,14 +75,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ContractParaObras.Columnas.ID_REMOTA,
 
     };
-
-    // Indices para las columnas indicadas en la proyección obra
-    public static final int COLUMNA_COD_OBRA = 0;
-    public static final int COLUMNA_ID_REMOTA_obra = 5;
-    public static final int COLUMNA_LOCALIDAD = 1;
-    public static final int COLUMNA_NOMBRE = 2;
-    public static final int COLUMNA_FINALIZADA = 3;
-    public static final int COLUMNA_VISIBLE_PETROLEO = 4;
 
     /**
      * Proyección para las consultas Vales
@@ -176,6 +156,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             realizarSincronizacionLocalUsuarios(syncResult);
             realizarSincronizacionLocalMes(syncResult);
             realizarSincronizacionLocalProveedores(syncResult);
+            //realizarSincronizacionRemota();
 
         } else {
             realizarSincronizacionRemota();
@@ -375,7 +356,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         );
     }
-
     /**
      * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
      *
@@ -401,7 +381,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
     }
-/**
+    /**
      * Procesa la respuesta del servidor al pedir que se retornen todos los gastos.
      *
      * @param response   Respuesta en formato Json
@@ -556,7 +536,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Actualizando el servidor...");
 
         iniciarActualizacion();
-
+        JsonObjectRequest jsonObjectRequests;
         Cursor c = obtenerRegistrosSucios();
 
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros sucios.");
@@ -567,7 +547,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 System.out.println("ID :"+idLocal);
 
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(
-                        new JsonObjectRequest(
+                        jsonObjectRequests = new JsonObjectRequest(
                                 Request.Method.POST,
                                 Constantes.POST_VALE,
                                 Utilidades.deCursorAJSONObject(c),
@@ -584,7 +564,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                     }
                                 }
 
-                        ) {
+                        )
+
+                        {
                             @Override
                             public Map<String, String> getHeaders() {
                                 Map<String, String> headers = new HashMap<String, String>();
@@ -599,6 +581,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             }
                         }
                 );
+                jsonObjectRequests.setRetryPolicy(new DefaultRetryPolicy(500000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             }
 
         } else {
@@ -734,11 +719,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
 
-            cod_obra         = c.getString(SyncAdapterObra.COLUMNA_ID_REMOTA);
-            nombre           = c.getString(SyncAdapterObra.COLUMNA_NOMBRE);
-            localidad        = c.getString(SyncAdapterObra.COLUMNA_LOCALIDAD);
-            visible_petroleo = c.getInt(SyncAdapterObra.COLUMNA_VISIBLE_PETROLEO);
-            finalizada       = c.getInt(SyncAdapterObra.COLUMNA_FINALIZADA);
+            cod_obra         = c.getString(AdapterObra.COLUMNA_ID_REMOTA);
+            nombre           = c.getString(AdapterObra.COLUMNA_NOMBRE);
+            localidad        = c.getString(AdapterObra.COLUMNA_LOCALIDAD);
+            visible_petroleo = c.getInt(AdapterObra.COLUMNA_VISIBLE_PETROLEO);
+            finalizada       = c.getInt(AdapterObra.COLUMNA_FINALIZADA);
 
             ObraGetSet match = expenseMap.get(cod_obra);
 
@@ -867,6 +852,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String codigo;
         int vigente;
         String descripcion;
+        int id_categoria;
 
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
@@ -874,6 +860,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             codigo         = c.getString(SyncAdapterSurtidor.COLUMNA_CODIGO);
             descripcion    = c.getString(SyncAdapterSurtidor.COLUMNA_DESCRIPCION);
             vigente        = c.getInt(SyncAdapterSurtidor.COLUMNA_VIGENTE);
+            id_categoria   = c.getInt(SyncAdapterSurtidor.COLUMNA_ID_CATEGORIA);
 
             SurtidorGetSet match = expenseMap.get(codigo);
 
@@ -889,9 +876,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 boolean b = match.getCodigo() != codigo && !match.getCodigo().equals(codigo);
                 boolean b1 = match.getDescripcion() != descripcion;
                 boolean b2 = match.getVigente() != vigente;
+                boolean b3 = match.getId_categoria() != id_categoria;
 
 
-                if (b || b1 || b2 ) {
+
+                if (b || b1 || b2 || b3) {
 
                     Log.i(TAG, "Programando actualización de: " + existingUri);
 
@@ -899,6 +888,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .withValue(ContractParaSurtidor.Columnas.CODIGO, match.getCodigo())
                             .withValue(ContractParaSurtidor.Columnas.DESCRIPCION, match.getDescripcion())
                             .withValue(ContractParaSurtidor.Columnas.VIGENTE, match.getVigente())
+                            .withValue(ContractParaSurtidor.Columnas.ID_CATEGORIA, match.getId_categoria())
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
@@ -922,6 +912,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .withValue(ContractParaSurtidor.Columnas.CODIGO, e.getCodigo())
                     .withValue(ContractParaSurtidor.Columnas.DESCRIPCION, e.getDescripcion())
                     .withValue(ContractParaSurtidor.Columnas.VIGENTE, e.getVigente())
+                    .withValue(ContractParaSurtidor.Columnas.ID_CATEGORIA, e.getId_categoria())
                     .withValue(ContractParaSurtidor.Columnas.ID_REMOTA, e.getCodigo())
                     .build());
             syncResult.stats.numInserts++;
@@ -994,18 +985,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Encontrar datos obsoletos
         String codigo;
         String patente;
-        String fecha;
+        String termino_contrato;
         String forma_pago;
         String valor_pago;
 
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
 
-            codigo     = c.getString(SyncAdapterVehiculos.COLUMNA_CODIGO);
-            patente    = c.getString(SyncAdapterVehiculos.COLUMNA_PATENTE);
-            fecha      = c.getString(SyncAdapterVehiculos.COLUMNA_FECHA);
-            forma_pago = c.getString(SyncAdapterVehiculos.COLUMNA_FORMA_PAGO);
-            valor_pago = c.getString(SyncAdapterVehiculos.COLUMNA_VALOR_PAGO);
+            codigo           = c.getString(SyncAdapterVehiculos.COLUMNA_CODIGO);
+            patente          = c.getString(SyncAdapterVehiculos.COLUMNA_PATENTE);
+            termino_contrato = c.getString(SyncAdapterVehiculos.COLUMNA_FECHA_TERMINO_CONTRATO);
+            forma_pago       = c.getString(SyncAdapterVehiculos.COLUMNA_FORMA_PAGO);
+            valor_pago       = c.getString(SyncAdapterVehiculos.COLUMNA_VALOR_PAGO);
 
             VehiculoGetSet match = expenseMap.get(codigo);
 
@@ -1020,7 +1011,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 boolean b = match.getCodigo() != codigo && !match.getCodigo().equals(codigo);
                 boolean b1 = match.getPatente() != patente && !match.getPatente().equals(patente);
-                boolean b2 = match.getFecha() != fecha && !match.getFecha().equals(fecha);
+                boolean b2 = match.getfecha_termino_contrato() != termino_contrato && !match.getfecha_termino_contrato().equals(termino_contrato);
                 boolean b3 = match.getForma_pago() != forma_pago && !match.getForma_pago().equals(forma_pago);
                 boolean b4 = match.getValor_pago() != valor_pago && !match.getValor_pago().equals(valor_pago);
 
@@ -1032,7 +1023,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     ops.add(ContentProviderOperation.newUpdate(existingUri)
                             .withValue(ContractParaVehiculos.Columnas.CODIGO, match.getCodigo())
                             .withValue(ContractParaVehiculos.Columnas.PATENTE, match.getPatente())
-                            .withValue(ContractParaVehiculos.Columnas.FECHA, match.getFecha())
+                            .withValue(ContractParaVehiculos.Columnas.FECHA_TERMINO_CONTRATO, match.getfecha_termino_contrato())
                             .withValue(ContractParaVehiculos.Columnas.FORMA_PAGO, match.getForma_pago())
                             .withValue(ContractParaVehiculos.Columnas.VALOR_PAGO, match.getValor_pago())
                             .build());
@@ -1053,11 +1044,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Insertar items resultantes
         for (VehiculoGetSet e : expenseMap.values()) {
-            Log.i(TAG, "Programando inserción de: " + e.getCodigo());
+            Log.i(TAG, "Programando inserción de: " + e.getCodigo()+" -" +e.getfecha_termino_contrato());
             ops.add(ContentProviderOperation.newInsert(ContractParaVehiculos.CONTENT_URI_VEHICULO)
                     .withValue(ContractParaVehiculos.Columnas.CODIGO, e.getCodigo())
                     .withValue(ContractParaVehiculos.Columnas.PATENTE, e.getPatente())
-                    .withValue(ContractParaVehiculos.Columnas.FECHA, e.getFecha())
+                    .withValue(ContractParaVehiculos.Columnas.FECHA_TERMINO_CONTRATO, e.getfecha_termino_contrato())
                     .withValue(ContractParaVehiculos.Columnas.FORMA_PAGO, e.getForma_pago())
                     .withValue(ContractParaVehiculos.Columnas.VALOR_PAGO, e.getValor_pago())
                     .withValue(ContractParaVehiculos.Columnas.ID_REMOTA, e.getCodigo())
@@ -1255,7 +1246,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i("consulta  vehiculo","consulta registros remotos");
         Uri uri = ContractParaMes.CONTENT_URI_MES;
         String select = ContractParaMes.Columnas.ID_REMOTA + " IS NOT NULL";
-        Cursor c = resolver.query(uri, SyncAdapterMes.PROJECTION, select, null, null);
+        Cursor c = resolver.query(uri, AdapterMes.PROJECTION, select, null, null);
         assert c != null;
 
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
@@ -1270,11 +1261,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         while (c.moveToNext()) {
             syncResult.stats.numEntries++;
 
-            id        = c.getString(SyncAdapterMes.COLUMNA_ID);
-            proceso   = c.getString(SyncAdapterMes.COLUMNA_PROCESO);
-            abierta   = c.getInt(SyncAdapterMes.COLUMNA_ABIERTA);
-            mes       = c.getInt(SyncAdapterMes.COLUMNA_MES);
-            ano       = c.getInt(SyncAdapterMes.COLUMNA_ANO);
+            id        = c.getString(AdapterMes.COLUMNA_ID);
+            proceso   = c.getString(AdapterMes.COLUMNA_PROCESO);
+            abierta   = c.getInt(AdapterMes.COLUMNA_ABIERTA);
+            mes       = c.getInt(AdapterMes.COLUMNA_MES);
+            ano       = c.getInt(AdapterMes.COLUMNA_ANO);
 
             MesprocesoGetSet match = expenseMap.get(id);
 

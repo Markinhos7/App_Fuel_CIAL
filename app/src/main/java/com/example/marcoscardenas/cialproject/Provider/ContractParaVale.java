@@ -12,17 +12,12 @@ public class ContractParaVale {
          * Autoridad del Content ProviderProvider
          */
         public final static String AUTHORITY = "com.example.marcoscardenas.cialproject";
-        public final static String AUTHORITY_OBRA = "com.example.marcoscardenas.cialproject";
         /**
          * Representación de la tabla a consultar
          */
         public static final String VALE_ENCABEZADO = "comb2_vales_encabezado";
-        public static final String VALE_DETALLE = "comb2_vales_encabezado";
-        private static final String RUTA_SURTIDOR = "cabeceras_pedidos";
         private static final String SURTIDOR = "surtidores";
         private static final String OBRA = "obras";
-        private static final String RUTA_CLIENTES = "clientes";
-        private static final String RUTA_FORMAS_PAGO = "formas_pago";
         /**
          * Tipo MIME que retorna la consulta de una sola fila
          */
@@ -95,9 +90,9 @@ public class ContractParaVale {
             uriMatcher.addURI(AUTHORITY,ContractParaVehiculos.VEHICULO , ContractParaVehiculos.ALLROWS_VEHICULO);
             uriMatcher.addURI(AUTHORITY,ContractParaVehiculos.VEHICULO + "/#", ContractParaVehiculos.SINGLE_ROW_VEHICULO);
             uriMatcher.addURI(AUTHORITY,ContractParaMes.MES , ContractParaMes.ALLROWS_MES);
-            uriMatcher.addURI(AUTHORITY, ContractParaMes.MES + "/#", ContractParaMes.SINGLE_ROW_MES);
+            uriMatcher.addURI(AUTHORITY,ContractParaMes.MES + "/#", ContractParaMes.SINGLE_ROW_MES);
             uriMatcher.addURI(AUTHORITY,ContractParaProveedor.PROVEEDOR , ContractParaProveedor.ALLROWS_PROVEEDOR);
-            uriMatcher.addURI(AUTHORITY, ContractParaProveedor.PROVEEDOR + "/#", ContractParaProveedor.SINGLE_ROW_PROVEEDOR);
+            uriMatcher.addURI(AUTHORITY,ContractParaProveedor.PROVEEDOR + "/#", ContractParaProveedor.SINGLE_ROW_PROVEEDOR);
         }
 
         // Valores para la columna ESTADO
@@ -128,7 +123,6 @@ public class ContractParaVale {
             public final static String HOROMETRO = "contador_hr";
             public final static String KILOMETRO = "contador_km";
             public final static String OBSERVACIONES = "observaciones";
-
             public final static String CANTIDAD = "cantidad";
             public final static String PRODUCTO = "id_producto";
             public final static String VALE_ENC = "id_vale_enc";

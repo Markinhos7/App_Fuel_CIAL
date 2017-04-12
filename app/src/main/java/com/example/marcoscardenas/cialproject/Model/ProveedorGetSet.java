@@ -7,6 +7,7 @@ public class ProveedorGetSet {
 
     String rut, razon_social, usuario_petroleo;
 
+
     public ProveedorGetSet(String rut, String razon_social ,String usuario_petroleo) {
         this.razon_social = razon_social;
         this.rut = rut;

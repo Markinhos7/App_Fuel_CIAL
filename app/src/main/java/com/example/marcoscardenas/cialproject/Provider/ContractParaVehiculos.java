@@ -70,7 +70,7 @@ public class ContractParaVehiculos {
         }
         public final static String CODIGO = "codigo";
         public final static String PATENTE = "patente";
-        public final static String FECHA = "fecha_termino_contrato";
+        public final static String FECHA_TERMINO_CONTRATO = "fecha_termino_contrato";
         public final static String VALOR_PAGO = "valor_pago";
         public final static String FORMA_PAGO = "forma_pago";
 

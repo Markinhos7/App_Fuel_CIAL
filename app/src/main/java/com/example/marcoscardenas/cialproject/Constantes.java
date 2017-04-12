@@ -1,19 +1,19 @@
 package com.example.marcoscardenas.cialproject;
 
 /**
- * Constantes
+ * Created by Marcos on 23-03-17.
  */
+
 public class Constantes {
 
     /**
      * Puerto que utilizas para la conexión.
-     * Dejalo en blanco si no has configurado esta característica.
      */
 
     private static final String IP = "http://192.168.0.213:80/serviciosweb";
      // Rutas de los Web Services
 
-    public static final String GET_BY_PATENTE = IP + "/search_vehiculo.php?";
+    public static final String GET_BY_PATENTE = IP + "/search_vehiculo.php";
     public static final String GET_BY_PROVEEDORES = IP + "/search_proveedor.php";
     public static final String GET_BY_VALE = IP  +"/Get_vale.php";
     public static final String GET_BY_MES = IP + "/search_mes.php";

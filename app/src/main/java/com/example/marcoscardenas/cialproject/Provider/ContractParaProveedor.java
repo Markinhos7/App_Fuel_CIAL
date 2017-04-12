@@ -72,6 +72,7 @@ public class ContractParaProveedor {
         public final static String RAZON_SOCIAL = "razon_social";
         public final static String USUARIO_PETROLEO = "usuario_petroleo";
 
+
         public static final String ESTADO = "estado";
         public static final String ID_REMOTA = "idRemota";
         public final static String PENDIENTE_INSERCION = "pendiente_insercion";

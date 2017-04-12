@@ -57,7 +57,7 @@ public class SyncAdapterVehiculos {
     public static final String[] PROJECTION = new String[]{
             ContractParaVehiculos.Columnas.CODIGO,
             ContractParaVehiculos.Columnas.PATENTE,
-            ContractParaVehiculos.Columnas.FECHA,
+            ContractParaVehiculos.Columnas.FECHA_TERMINO_CONTRATO,
             ContractParaVehiculos.Columnas.FORMA_PAGO,
             ContractParaVehiculos.Columnas.VALOR_PAGO,
             ContractParaVehiculos.Columnas.ID_REMOTA,
@@ -68,7 +68,7 @@ public class SyncAdapterVehiculos {
     public static final int COLUMNA_CODIGO = 0;
     public static final int COLUMNA_ID_REMOTA = 5;
     public static final int COLUMNA_PATENTE = 1;
-    public static final int COLUMNA_FECHA = 2;
+    public static final int COLUMNA_FECHA_TERMINO_CONTRATO = 2;
     public static final int COLUMNA_FORMA_PAGO = 3;
     public static final int COLUMNA_VALOR_PAGO = 4;
 
